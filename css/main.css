@@ -965,6 +965,15 @@ pre code {
 .post-body .note :last-child {
   margin-bottom: 0;
 }
+.post-body .note:not(.no-icon) {
+  padding-left: 2.5em;
+}
+.post-body .note:not(.no-icon)::before {
+  font-size: 1.5em;
+  left: 0.3em;
+  position: absolute;
+  top: calc(50% - 1em);
+}
 .post-body .note.default {
   background: #f3f3f3;
   border-color: #e1e1e1;
@@ -992,6 +1001,11 @@ pre code {
     border-bottom-color: #f8f8f8;
     color: #f8f8f8;
   }
+}
+.post-body .note.default:not(.no-icon)::before {
+  content: '\f0a9';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
 }
 .post-body .note.primary {
   background: #f3daff;
@@ -1021,6 +1035,11 @@ pre code {
     color: #f7f0ff;
   }
 }
+.post-body .note.primary:not(.no-icon)::before {
+  content: '\f055';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
 .post-body .note.info {
   background: #d9edf7;
   border-color: #b3e5ef;
@@ -1048,6 +1067,11 @@ pre code {
     border-bottom-color: #ecf8fb;
     color: #ecf8fb;
   }
+}
+.post-body .note.info:not(.no-icon)::before {
+  content: '\f05a';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
 }
 .post-body .note.success {
   background: #dff0d8;
@@ -1077,6 +1101,11 @@ pre code {
     color: #f3f9ef;
   }
 }
+.post-body .note.success:not(.no-icon)::before {
+  content: '\f058';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
 .post-body .note.warning {
   background: #fcf4e3;
   border-color: #fae4cd;
@@ -1105,6 +1134,11 @@ pre code {
     color: #fef8f3;
   }
 }
+.post-body .note.warning:not(.no-icon)::before {
+  content: '\f06a';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
 .post-body .note.danger {
   background: #f2dfdf;
   border-color: #ebcdd2;
@@ -1132,6 +1166,11 @@ pre code {
     border-bottom-color: #faf2f4;
     color: #faf2f4;
   }
+}
+.post-body .note.danger:not(.no-icon)::before {
+  content: '\f056';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
 }
 .post-body .tabs {
   margin-bottom: 20px;
@@ -1516,9 +1555,10 @@ pre code {
     margin-bottom: 10px;
     margin-right: 10px;
     vertical-align: middle;
+    transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #ffff7c;
+    background: #0858d0;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2970,17 +3010,6 @@ header.header {
   .menu .menu-item.menu-item-search {
     display: none;
   }
-}
-.main-menu .menu-item-active::after {
-  background: #bbb;
-  border-radius: 50%;
-  content: ' ';
-  height: 6px;
-  margin-top: -3px;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  width: 6px;
 }
 .sub-menu {
   margin: 0;
