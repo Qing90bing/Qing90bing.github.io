@@ -1558,7 +1558,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #3059ff;
+    background: #88ff4a;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3198,6 +3198,18 @@ header.header {
 :root {
   --custom-border-radius: 12px; /* 主要容器的圆角弧度 */
   --custom-border-radius-small: 8px; /* 用于代码块、图片等小元素 */
+}
+/* --- 侧边栏与头部 --- */
+/* 站点头部区域 */
+.header {
+  border-radius: var(--custom-border-radius) !important;
+  margin-bottom: 20px; /* 为头部和侧边栏之间添加一些间距 */
+  overflow: hidden; /* 裁剪内部溢出的直角元素 */
+}
+/* 侧边栏内部容器 */
+.sidebar-inner {
+  border-radius: var(--custom-border-radius) !important;
+  overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
 /* --- 主要布局容器 --- */
 /* 主要内容区域 */
