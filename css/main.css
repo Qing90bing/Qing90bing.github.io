@@ -1558,7 +1558,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #5c3882;
+    background: #3059ff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -1962,6 +1962,7 @@ pre code {
   color: #f00;
   display: inline-block;
   margin: 0 5px;
+  animation: icon-animate 1.33s ease-in-out infinite;
 }
 @keyframes icon-animate {
   0%, 100% {
@@ -3191,4 +3192,37 @@ header.header {
   .comments {
     padding: 10px 12px;
   }
+}
+/* --- 全局圆角样式 --- */
+/* 定义圆角变量，方便统一修改 */
+:root {
+  --custom-border-radius: 12px; /* 主要容器的圆角弧度 */
+  --custom-border-radius-small: 8px; /* 用于代码块、图片等小元素 */
+}
+/* --- 主要布局容器 --- */
+/* 主要内容区域 */
+.main-inner {
+  border-radius: var(--custom-border-radius) !important;
+}
+/* 文章区块 */
+.post-block {
+  border-radius: var(--custom-border-radius) !important;
+  overflow: hidden; /* 裁剪内部溢出的直角元素 */
+}
+/* --- 细节与插件元素 --- */
+/* 文章内的图片 */
+.post-body img {
+  border-radius: var(--custom-border-radius-small) !important;
+}
+/* 返回顶部按钮 */
+.back-to-top {
+  border-radius: var(--custom-border-radius-small) !important;
+}
+/* --- 功能区 --- */
+/* 评论区 (增强选择器) */
+.comments,
+.v[data-class=v] .vwrap,
+.waline-container {
+  border-radius: var(--custom-border-radius) !important;
+  overflow: hidden;
 }
