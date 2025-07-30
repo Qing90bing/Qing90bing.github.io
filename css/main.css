@@ -1558,7 +1558,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #a2edff;
+    background: #78adb4;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3200,9 +3200,9 @@ header.header {
   --custom-border-radius-small: 8px; /* 用于代码块、图片等小元素 */
 }
 /* --- 整体布局与间距 --- */
-@media (min-width: 960px) {
+@media (min-width: 1000px) {
   .main {
-    max-width: 960px;
+    max-width: 1000px;
 /* 修正：将顶部间距设为 18px，左右自动，底部为0 */
     margin: 18px auto 0 auto !important;
     float: none !important;
