@@ -1558,7 +1558,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #88ff4a;
+    background: #a2edff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3199,11 +3199,23 @@ header.header {
   --custom-border-radius: 12px; /* 主要容器的圆角弧度 */
   --custom-border-radius-small: 8px; /* 用于代码块、图片等小元素 */
 }
-/* --- 侧边栏与头部 --- */
+/* --- 整体布局与间距 --- */
+@media (min-width: 960px) {
+  .main {
+    max-width: 960px;
+/* 修正：将顶部间距设为 18px，左右自动，底部为0 */
+    margin: 18px auto 0 auto !important;
+    float: none !important;
+  }
+  .footer-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+/* --- 容器圆角 --- */
 /* 站点头部区域 */
 .header {
   border-radius: var(--custom-border-radius) !important;
-  margin-bottom: 20px; /* 为头部和侧边栏之间添加一些间距 */
   overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
 /* 侧边栏内部容器 */
@@ -3211,7 +3223,6 @@ header.header {
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
-/* --- 主要布局容器 --- */
 /* 主要内容区域 */
 .main-inner {
   border-radius: var(--custom-border-radius) !important;
@@ -3221,7 +3232,7 @@ header.header {
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
-/* --- 细节与插件元素 --- */
+/* --- 细节与插件元素圆角 --- */
 /* 文章内的图片 */
 .post-body img {
   border-radius: var(--custom-border-radius-small) !important;
@@ -3230,11 +3241,27 @@ header.header {
 .back-to-top {
   border-radius: var(--custom-border-radius-small) !important;
 }
-/* --- 功能区 --- */
 /* 评论区 (增强选择器) */
 .comments,
 .v[data-class=v] .vwrap,
 .waline-container {
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden;
+}
+/* --- 字体大小调整 --- */
+/* 调整文章正文的字体大小 */
+.post-body {
+  font-size: 0.9em;
+}
+/* 调整文章标题的字体大小 */
+.post-title-link {
+  font-size: 0.95em;
+}
+/* 调整文章末尾版权声明的字体大小 */
+.post-copyright {
+  font-size: 0.9em;
+}
+/* --- 页脚内容居中 --- */
+.footer-inner {
+  text-align: center;
 }
