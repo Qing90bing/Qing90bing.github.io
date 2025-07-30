@@ -1558,7 +1558,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #78adb4;
+    background: #f778c6;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3208,7 +3208,7 @@ header.header {
     float: none !important;
   }
   .footer-inner {
-    max-width: 960px;
+    max-width: 1000px;
     margin: 0 auto;
   }
 }
@@ -3230,7 +3230,6 @@ header.header {
 /* 文章区块 */
 .post-block {
   border-radius: var(--custom-border-radius) !important;
-  overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
 /* --- 细节与插件元素圆角 --- */
 /* 文章内的图片 */
@@ -3248,7 +3247,7 @@ header.header {
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden;
 }
-/* --- 字体大小调整 --- */
+/* --- 字体与文章间距调整 --- */
 /* 调整文章正文的字体大小 */
 .post-body {
   font-size: 0.9em;
@@ -3257,11 +3256,30 @@ header.header {
 .post-title-link {
   font-size: 0.95em;
 }
-/* 调整文章末尾版权声明的字体大小 */
-.post-copyright {
-  font-size: 0.9em;
+/* 调整标题和文章内容距离 */
+.post-header {
+  margin-bottom: 0px !important;
 }
 /* --- 页脚内容居中 --- */
 .footer-inner {
   text-align: center;
+}
+/* --- 版权声明卡片美化 --- */
+.post-copyright ul {
+  position: relative;
+  list-style: none;
+  overflow: hidden;
+  padding: 1em 1.5em;
+  background: var(--card-bg-color);
+/* 将左侧边框改为指定的蓝色 */
+  border-left: 4px solid #3498db;
+  border-radius: var(--custom-border-radius-small, 8px);
+  box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05);
+}
+.post-copyright li {
+  line-height: 1.8;
+  position: relative;
+  z-index: 1;
+/* 将版权信息文字缩小一号 */
+  font-size: 0.95em;
 }
