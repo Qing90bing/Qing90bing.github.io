@@ -218,7 +218,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/31/%E4%B8%AA%E4%BA%BA%E9%80%82%E9%85%8DWakeUP%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E8%AF%BE%E8%A1%A8%E8%AE%B0%E5%BD%95/a3975d2b.html">
+    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/31/a3975d2b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/QingNoteblog/images/avatar.jpg">
@@ -236,7 +236,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/QingNoteblog/2025/07/31/%E4%B8%AA%E4%BA%BA%E9%80%82%E9%85%8DWakeUP%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E8%AF%BE%E8%A1%A8%E8%AE%B0%E5%BD%95/a3975d2b.html" class="post-title-link" itemprop="url">个人适配WakeUP学校教务课表记录</a>
+          <a href="/QingNoteblog/2025/07/31/a3975d2b.html" class="post-title-link" itemprop="url">个人适配WakeUP学校教务课表记录</a>
         </h2>
 
         <div class="post-meta-container">
@@ -248,7 +248,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-07-31 18:52:28 / 修改时间：21:28:36" itemprop="dateCreated datePublished" datetime="2025-07-31T18:52:28+08:00">2025-07-31</time>
+      <time title="创建时间：2025-07-31 18:52:28 / 修改时间：22:31:23" itemprop="dateCreated datePublished" datetime="2025-07-31T18:52:28+08:00">2025-07-31</time>
     </span>
 
   
@@ -260,8 +260,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/QingNoteblog/2025/07/31/%E4%B8%AA%E4%BA%BA%E9%80%82%E9%85%8DWakeUP%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E8%AF%BE%E8%A1%A8%E8%AE%B0%E5%BD%95/a3975d2b.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/31/%E4%B8%AA%E4%BA%BA%E9%80%82%E9%85%8DWakeUP%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E8%AF%BE%E8%A1%A8%E8%AE%B0%E5%BD%95/a3975d2b.html" itemprop="commentCount"></span>
+    <a title="waline" href="/QingNoteblog/2025/07/31/a3975d2b.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/31/a3975d2b.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,7 +292,7 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="开头情景"><a href="#开头情景" class="headerlink" title="开头情景"></a>开头情景</h2><p>第一次使用 WakeUp 课程表时，我想使用教务系统导入课程表，但发现自己的学校没有适配教务系统。尝试使用通用教务系统导入后，发现部分课程没有导入，信息也比较混乱，所以我决定自己动手进行适配，但是我并不会写Kotlin代码，当时时间比较紧，就使用AI完成了这个适配，而且效果还不错。</p>
 <p>第一步，我们前往 WakeUp 官方提供的适配器仓库 <a target="_blank" rel="noopener" href="https://github.com/YZune/CourseAdapter">YZune&#x2F;CourseAdapter</a>，了解适配的基本原理和结构。</p>
-<h2 id="适配器代码分析"><a href="#适配器代码分析" class="headerlink" title="适配器代码分析"></a>适配器代码分析</h2><p>适配器的核心是解析教务系统网页的 HTML 源码，提取出课程信息，并将其转换为 WakeUp App 所要求的标准格式。下面我将以我为**武汉船舶职业技术学院（基于学校的金智教务系统）**编写的适配器为例。</p>
+<h2 id="适配器代码分析"><a href="#适配器代码分析" class="headerlink" title="适配器代码分析"></a>适配器代码分析</h2><p>适配器的核心是解析教务系统网页的 HTML 源码，提取出课程信息，并将其转换为 WakeUp App 所要求的标准格式。下面我将以我为武汉船舶职业技术学院（基于学校的金智教务系统）编写的适配器为例。</p>
 <h3 id="1-核心解析器：WISTParser-kt"><a href="#1-核心解析器：WISTParser-kt" class="headerlink" title="1. 核心解析器：WISTParser.kt"></a>1. 核心解析器：<code>WISTParser.kt</code></h3><p>这个文件是整个适配器的灵魂，它负责从原始的 HTML 文本中提取、清洗和组织课程数据。</p>
 <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><p>在开始分析代码前，先看一下这个解析器实现了哪些功能：</p>
 <ul>
@@ -303,7 +303,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/QingNoteblog/2025/07/31/%E4%B8%AA%E4%BA%BA%E9%80%82%E9%85%8DWakeUP%E5%AD%A6%E6%A0%A1%E6%95%99%E5%8A%A1%E8%AF%BE%E8%A1%A8%E8%AE%B0%E5%BD%95/a3975d2b.html#more" rel="contents">
+              <a class="btn" href="/QingNoteblog/2025/07/31/a3975d2b.html#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -334,7 +334,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/29/%E8%AF%BB%E3%80%8A%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%E3%80%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E6%98%AF%E8%B0%81%E7%9A%84%E5%AE%8F%E5%A4%A7%E5%8F%99%E4%BA%8B/5f631fa5.html">
+    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/29/5f631fa5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/QingNoteblog/images/avatar.jpg">
@@ -352,7 +352,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/QingNoteblog/2025/07/29/%E8%AF%BB%E3%80%8A%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%E3%80%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E6%98%AF%E8%B0%81%E7%9A%84%E5%AE%8F%E5%A4%A7%E5%8F%99%E4%BA%8B/5f631fa5.html" class="post-title-link" itemprop="url">读《人类简史》：一次关于我们是谁的宏大叙事</a>
+          <a href="/QingNoteblog/2025/07/29/5f631fa5.html" class="post-title-link" itemprop="url">读《人类简史》：一次关于我们是谁的宏大叙事</a>
         </h2>
 
         <div class="post-meta-container">
@@ -370,7 +370,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-31 21:04:00" itemprop="dateModified" datetime="2025-07-31T21:04:00+08:00">2025-07-31</time>
+      <time title="修改时间：2025-07-31 22:27:19" itemprop="dateModified" datetime="2025-07-31T22:27:19+08:00">2025-07-31</time>
     </span>
 
   
@@ -382,8 +382,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/QingNoteblog/2025/07/29/%E8%AF%BB%E3%80%8A%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%E3%80%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E6%98%AF%E8%B0%81%E7%9A%84%E5%AE%8F%E5%A4%A7%E5%8F%99%E4%BA%8B/5f631fa5.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/29/%E8%AF%BB%E3%80%8A%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%E3%80%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E6%98%AF%E8%B0%81%E7%9A%84%E5%AE%8F%E5%A4%A7%E5%8F%99%E4%BA%8B/5f631fa5.html" itemprop="commentCount"></span>
+    <a title="waline" href="/QingNoteblog/2025/07/29/5f631fa5.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/29/5f631fa5.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -428,7 +428,7 @@
 <p>这不仅仅是一本历史书，更是一本关于人类自身、关于我们未来的深刻启示录。强烈推荐给每一个对世界保持好奇心的人。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/QingNoteblog/2025/07/29/%E8%AF%BB%E3%80%8A%E4%BA%BA%E7%B1%BB%E7%AE%80%E5%8F%B2%E3%80%8B%EF%BC%9A%E4%B8%80%E6%AC%A1%E5%85%B3%E4%BA%8E%E6%88%91%E4%BB%AC%E6%98%AF%E8%B0%81%E7%9A%84%E5%AE%8F%E5%A4%A7%E5%8F%99%E4%BA%8B/5f631fa5.html#more" rel="contents">
+              <a class="btn" href="/QingNoteblog/2025/07/29/5f631fa5.html#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -459,7 +459,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/29/%E9%95%B0%E4%BB%93%E4%B8%80%E6%97%A5%EF%BC%9A%E6%B5%B7%E4%B8%8E%E5%8F%A4%E9%83%BD%E7%9A%84%E6%82%A0%E7%84%B6%E6%97%B6%E5%85%89/edb50152.html">
+    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/29/edb50152.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/QingNoteblog/images/avatar.jpg">
@@ -477,7 +477,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/QingNoteblog/2025/07/29/%E9%95%B0%E4%BB%93%E4%B8%80%E6%97%A5%EF%BC%9A%E6%B5%B7%E4%B8%8E%E5%8F%A4%E9%83%BD%E7%9A%84%E6%82%A0%E7%84%B6%E6%97%B6%E5%85%89/edb50152.html" class="post-title-link" itemprop="url">镰仓一日：海与古都的悠然时光</a>
+          <a href="/QingNoteblog/2025/07/29/edb50152.html" class="post-title-link" itemprop="url">镰仓一日：海与古都的悠然时光</a>
         </h2>
 
         <div class="post-meta-container">
@@ -495,7 +495,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-31 21:03:33" itemprop="dateModified" datetime="2025-07-31T21:03:33+08:00">2025-07-31</time>
+      <time title="修改时间：2025-07-31 22:27:19" itemprop="dateModified" datetime="2025-07-31T22:27:19+08:00">2025-07-31</time>
     </span>
 
   
@@ -507,8 +507,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/QingNoteblog/2025/07/29/%E9%95%B0%E4%BB%93%E4%B8%80%E6%97%A5%EF%BC%9A%E6%B5%B7%E4%B8%8E%E5%8F%A4%E9%83%BD%E7%9A%84%E6%82%A0%E7%84%B6%E6%97%B6%E5%85%89/edb50152.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/29/%E9%95%B0%E4%BB%93%E4%B8%80%E6%97%A5%EF%BC%9A%E6%B5%B7%E4%B8%8E%E5%8F%A4%E9%83%BD%E7%9A%84%E6%82%A0%E7%84%B6%E6%97%B6%E5%85%89/edb50152.html" itemprop="commentCount"></span>
+    <a title="waline" href="/QingNoteblog/2025/07/29/edb50152.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/29/edb50152.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -550,7 +550,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/QingNoteblog/2025/07/29/%E9%95%B0%E4%BB%93%E4%B8%80%E6%97%A5%EF%BC%9A%E6%B5%B7%E4%B8%8E%E5%8F%A4%E9%83%BD%E7%9A%84%E6%82%A0%E7%84%B6%E6%97%B6%E5%85%89/edb50152.html#more" rel="contents">
+              <a class="btn" href="/QingNoteblog/2025/07/29/edb50152.html#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -581,7 +581,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/28/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/7a776471.html">
+    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/28/7a776471.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/QingNoteblog/images/avatar.jpg">
@@ -599,7 +599,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/QingNoteblog/2025/07/28/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/7a776471.html" class="post-title-link" itemprop="url">我的第一篇文章</a>
+          <a href="/QingNoteblog/2025/07/28/7a776471.html" class="post-title-link" itemprop="url">我的第一篇文章</a>
         </h2>
 
         <div class="post-meta-container">
@@ -617,7 +617,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-30 22:10:57" itemprop="dateModified" datetime="2025-07-30T22:10:57+08:00">2025-07-30</time>
+      <time title="修改时间：2025-07-31 22:27:19" itemprop="dateModified" datetime="2025-07-31T22:27:19+08:00">2025-07-31</time>
     </span>
 
   
@@ -629,8 +629,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/QingNoteblog/2025/07/28/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/7a776471.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/28/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/7a776471.html" itemprop="commentCount"></span>
+    <a title="waline" href="/QingNoteblog/2025/07/28/7a776471.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/28/7a776471.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -681,7 +681,7 @@
 <p>感谢你的阅读，期待与你在这里再次相遇！</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/QingNoteblog/2025/07/28/%E6%88%91%E7%9A%84%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/7a776471.html#more" rel="contents">
+              <a class="btn" href="/QingNoteblog/2025/07/28/7a776471.html#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -712,7 +712,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/28/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6%EF%BC%9A%E8%BF%99%E6%AC%BEApp%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%88%91%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/3e8b7646.html">
+    <link itemprop="mainEntityOfPage" href="https://qing90bing.github.io/QingNoteblog/2025/07/28/3e8b7646.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/QingNoteblog/images/avatar.jpg">
@@ -730,7 +730,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/QingNoteblog/2025/07/28/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6%EF%BC%9A%E8%BF%99%E6%AC%BEApp%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%88%91%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/3e8b7646.html" class="post-title-link" itemprop="url">告别拖延：这款App如何改变我的工作流</a>
+          <a href="/QingNoteblog/2025/07/28/3e8b7646.html" class="post-title-link" itemprop="url">告别拖延：这款App如何改变我的工作流</a>
         </h2>
 
         <div class="post-meta-container">
@@ -748,7 +748,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-07-31 21:03:52" itemprop="dateModified" datetime="2025-07-31T21:03:52+08:00">2025-07-31</time>
+      <time title="修改时间：2025-07-31 22:27:19" itemprop="dateModified" datetime="2025-07-31T22:27:19+08:00">2025-07-31</time>
     </span>
 
   
@@ -760,8 +760,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/QingNoteblog/2025/07/28/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6%EF%BC%9A%E8%BF%99%E6%AC%BEApp%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%88%91%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/3e8b7646.html#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/28/%E5%91%8A%E5%88%AB%E6%8B%96%E5%BB%B6%EF%BC%9A%E8%BF%99%E6%AC%BEApp%E5%A6%82%E4%BD%95%E6%94%B9%E5%8F%98%E6%88%91%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81/3e8b7646.html" itemprop="commentCount"></span>
+    <a title="waline" href="/QingNoteblog/2025/07/28/3e8b7646.html#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/QingNoteblog/2025/07/28/3e8b7646.html" itemprop="commentCount"></span>
     </a>
   </span>
   
