@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #fb8fa1;
+    background: #8aff21;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2937,10 +2937,6 @@ header.header {
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden; /* 裁剪内部溢出的直角元素 */
 }
-/* 主要内容区域 */
-.main-inner {
-  border-radius: var(--custom-border-radius) !important;
-}
 /* 文章区块 */
 .post-block {
   border-radius: var(--custom-border-radius) !important;
@@ -2957,20 +2953,18 @@ header.header {
 /* 评论区 (增强选择器) */
 .comments,
 .v[data-class=v] .vwrap,
-.waline-container {
+#waline {
+/* 直接针对 Waline 的 ID */
   border-radius: var(--custom-border-radius) !important;
   overflow: hidden;
 }
 /* --- 字体与文章间距调整 --- */
-/* 调整文章正文的字体大小 */
 .post-body {
   font-size: 0.9em;
 }
-/* 调整文章标题的字体大小 */
 .post-title-link {
   font-size: 0.95em;
 }
-/* 调整标题和文章内容距离 */
 .post-header {
   margin-bottom: 0px !important;
 }
@@ -2984,8 +2978,7 @@ header.header {
   list-style: none;
   overflow: hidden;
   padding: 1em 1.5em;
-  background: var(--card-bg-color);
-/* 将左侧边框改为指定的蓝色 */
+  background: rgba(255,255,255,0.5); /* 适配半透明效果 */
   border-left: 4px solid #3498db;
   border-radius: var(--custom-border-radius-small, 8px);
   box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05);
@@ -2994,11 +2987,289 @@ header.header {
   line-height: 1.8;
   position: relative;
   z-index: 1;
-/* 将版权信息文字缩小一号 */
   font-size: 0.95em;
 }
+/* 修复：精确控制头像样式，防止边缘被裁切 */
 .site-author-image {
-  max-width: 100px;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  display: block;
+  margin: 5px auto 10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+/* 添加一个透明边框作为缓冲区，防止父容器的 overflow:hidden 裁切到图像本身 */
+  border: 2px solid transparent;
+  box-sizing: border-box; /* 确保边框包含在100px的尺寸内 */
+}
+/*
+ * ===================================================================
+ * 新：背景模糊与内容半透明效果 (最终修复版)
+ * ===================================================================
+ */
+/* 1. 使用伪元素创建全局模糊背景 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: url("https://s21.ax1x.com/2025/08/01/pVNEIE9.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
+  transform: scale(1.05);
+}
+/* 2. 将 body 设置为 flex 容器以解决短页面底部空白问题 */
+body {
+  background: none !important; /* 必须设置，否则会覆盖模糊的伪元素 */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* 3. 让主内容区自动伸展，将页脚推到底部 */
+main.main {
+  flex-grow: 1;
+}
+/* 4. 恢复头部区域的单独背景图 */
+.site-brand-container {
+  background: url("https://s21.ax1x.com/2025/08/01/pVNVYVJ.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+/* 5. 为内容容器添加毛玻璃效果 */
+/* 将背景和模糊效果直接应用到 header, sidebar-inner, post-block 和评论区 */
+.header,
+.sidebar-inner,
+.post-block,
+#waline {
+/* 浅色模式：半透明白色背景 */
+/* 使用 !important 强制覆盖主题默认的纯白背景，确保毛玻璃效果可见 */
+  background: rgba(255,255,255,0.9) !important;
+/* 核心：重新添加高斯模糊效果 */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+/* 移除边框，使用阴影来定义轮廓 */
+  border: none;
+  box-shadow: 0 4px 15px 0 rgba(0,0,0,0.1);
+}
+/* 6. 移除 .main-inner 的背景，它只作为布局容器 */
+.main-inner {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+/* 7. 适配暗黑模式下的毛玻璃效果 */
+.darkmode--activated .header,
+.darkmode--activated .sidebar-inner,
+.darkmode--activated .post-block,
+.darkmode--activated #waline {
+/* 暗色模式：半透明深色背景 */
+  background: rgba(40,40,40,0.85) !important;
+  border: none;
+}
+/* 8. 修正暗黑模式下版权声明的背景 */
+.darkmode--activated .post-copyright ul {
+  background: rgba(0,0,0,0.2);
+}
+/* 9. 确保 post-block 和评论区内有足够的间距 */
+.post-block {
+  padding: 25px; /* 可以根据喜好调整 */
+}
+#waline {
+  padding: 25px;
+  margin-top: 20px; /* 为评论区添加顶部外边距，与文章内容分开 */
+}
+/* 10. 注意：此处已移除对 .footer 的任何样式修改，以保持其原始外观 */
+/*
+ * ===================================================================
+ * Waline 评论区美化 (V16 - 强制布局修正版)
+ * ===================================================================
+ */
+/* --- 通用布局与结构 (日间/夜间共用) --- */
+/* 移除 Waline 可能自带的内部背景和边框 */
+#waline .wl-panel,
+#waline .wl-card {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* 评论编辑区整体面板 */
+#waline .wl-comment {
+  border: none !important;
+  padding: 0;
+  background-color: transparent !important;
+}
+/* 强制重置评论面板布局，覆盖 Waline 默认的 flex 布局 */
+#waline .wl-panel {
+  display: block !important;
+}
+/* 用户信息输入行 */
+#waline .wl-header {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-bottom: 1rem; /* 与下方编辑器拉开距离 */
+  border: 1px solid var(--waline-border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--waline-input-bg);
+}
+/* 每个信息输入项 */
+#waline .wl-header-item {
+  position: relative;
+  padding: 0px;
+}
+/* 添加分割线 */
+#waline .wl-header-item:not(:last-child) {
+  border-right: 1px solid var(--waline-border-color);
+}
+/* 标签样式 */
+#waline .wl-header label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--waline-label-color);
+  margin-bottom: 0.125rem;
+}
+/* 输入框样式 */
+#waline .wl-input {
+  width: 100%;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  color: var(--waline-text-color);
+}
+#waline .wl-input:focus {
+  outline: none;
+}
+/* 主文本输入域 (在新的布局下将正常工作) */
+#waline .wl-editor {
+/* 核心修正：确保其作为块级元素撑满宽度并移除默认边距 */
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0; /* 新增：移除浏览器默认外边距，解决偏移问题 */
+/* 其他样式 */
+  resize: vertical;
+  min-height: 120px;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  border: 1px solid var(--waline-border-color);
+  background-color: var(--waline-input-bg);
+  color: var(--waline-text-color);
+}
+#waline .wl-editor:focus {
+  border-color: var(--waline-theme-color) !important;
+  box-shadow: 0 0 0 2px var(--waline-theme-color-light);
+}
+/* 按钮和元信息标签的通用样式 */
+#waline .wl-btn {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+#waline .wl-btn.primary {
+  border: none !important;
+  transition: background-color 0.3s, transform 0.2s;
+}
+#waline .wl-btn.primary:hover {
+  transform: translateY(-1px);
+}
+#waline .wl-meta span {
+  border: none !important;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+/* --- 日间模式颜色 --- */
+:root {
+  --waline-theme-color: #3b82f6;
+  --waline-theme-color-light: rgba(59,130,246,0.2);
+  --waline-input-bg: rgba(255,255,255,0.3);
+  --waline-border-color: #d1d5db;
+  --waline-label-color: #6b7280;
+  --waline-text-color: #111827;
+}
+#waline .wl-nick {
+  font-weight: normal !important;
+}
+#waline .wl-meta span {
+  color: #4b5563 !important;
+  background-color: rgba(0,0,0,0.05) !important;
+}
+#waline .wl-btn.primary {
+  background: var(--waline-theme-color) !important;
+  color: #fff !important;
+}
+#waline .wl-btn.primary:hover {
+  background: #2563eb !important;
+}
+/* --- 夜间模式颜色 --- */
+.darkmode--activated {
+  --waline-theme-color: #60a5fa;
+  --waline-theme-color-light: rgba(96,165,250,0.2);
+  --waline-input-bg: rgba(0,0,0,0.2);
+  --waline-border-color: #4b5563;
+  --waline-label-color: #9ca3af;
+  --waline-text-color: #e5e7eb;
+}
+.darkmode--activated #waline {
+  color: #d1d5db !important;
+}
+.darkmode--activated #waline .wl-editor::placeholder,
+.darkmode--activated #waline .wl-input::placeholder {
+  color: #6b7280 !important;
+}
+.darkmode--activated #waline .wl-meta-head {
+  color: #d1d5db !important;
+  border-bottom-color: #4b5563 !important;
+}
+.darkmode--activated #waline .wl-sort li {
+  color: #9ca3af;
+}
+.darkmode--activated #waline .wl-sort li:hover,
+.darkmode--activated #waline .wl-sort li.active {
+  color: #fff !important;
+}
+.darkmode--activated #waline .wl-actions .wl-action {
+  color: #a0a0a0 !important;
+}
+.darkmode--activated #waline .wl-actions .wl-action:hover {
+  color: #fff !important;
+}
+.darkmode--activated #waline .wl-content p,
+.darkmode--activated #waline .wl-nick {
+  color: #d1d5db !important;
+  font-weight: normal !important;
+}
+.darkmode--activated #waline .wl-meta span {
+  color: #9ca3af !important;
+  background-color: rgba(255,255,255,0.08) !important;
+}
+.darkmode--activated #waline .wl-time {
+  color: #9ca3af !important;
+}
+.darkmode--activated #waline .wl-card .wl-comment-actions button {
+  color: #a0a0a0 !important;
+}
+.darkmode--activated #waline .wl-card .wl-comment-actions button:hover {
+  color: #34d399 !important;
+}
+.darkmode--activated #waline .wl-btn {
+  border: 1px solid #4b5563 !important;
+  color: #d1d5db !important;
+  background: transparent !important;
+}
+.darkmode--activated #waline .wl-btn:hover {
+  background-color: rgba(255,255,255,0.1) !important;
+  border-color: #6b7280 !important;
+}
+.darkmode--activated #waline .wl-btn.primary {
+  background: var(--waline-theme-color) !important;
+  color: #fff !important;
+}
+.darkmode--activated #waline .wl-btn.primary:hover {
+  background: #3b82f6 !important;
 }
