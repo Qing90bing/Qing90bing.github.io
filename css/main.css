@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #8aff21;
+    background: #369aff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2907,234 +2907,225 @@ header.header {
     padding: 10px 12px;
   }
 }
-/* --- 全局圆角样式 --- */
-/* 定义圆角变量，方便统一修改 */
+/*
+ * ===================================================================
+ * 主题美化样式 (Optimized)
+ * ===================================================================
+ *
+ * 说明: 
+ * 本文件包含了对网站主题的深度美化，主要涵盖以下几个方面：
+ * 1. 全局圆角与布局调整，实现现代化卡片式设计。
+ * 2. 背景毛玻璃（Glassmorphism）效果，提升视觉层次感。
+ * 3. 针对特定组件（如版权声明、Waline评论区）的精细化样式调整。
+ * 4. 完整的日间/夜间双模式颜色适配。
+ * 5. SimpleBar.js 驱动的悬浮滚动条样式（最终版）。
+ *
+ * ===================================================================
+ */
+/*
+ * -------------------------------------------------------------------
+ * [1] 全局变量定义 (Global Variables)
+ * -------------------------------------------------------------------
+ * 使用 CSS 变量来统一管理关键样式属性，便于后续快速调整。
+ */
 :root {
-  --custom-border-radius: 12px; /* 主要容器的圆角弧度 */
-  --custom-border-radius-small: 8px; /* 用于代码块、图片等小元素 */
+/* 主要圆角尺寸，用于页面主容器，如头部、侧边栏、文章块等 */
+  --custom-border-radius: 12px;
+/* 次要圆角尺寸，用于内部小元素，如图片、按钮、代码块等 */
+  --custom-border-radius-small: 8px;
+/* Waline 评论区颜色变量 (日间模式) 
+   * 这些变量将在后续的 Waline 样式部分被广泛使用。
+   */
+  --waline-theme-color: #3b82f6; /* 主题色 (链接、高亮) */
+  --waline-theme-color-light: rgba(59,130,246,0.2); /* 主题色的浅色变体 (用于焦点阴影) */
+  --waline-input-bg: rgba(255,255,255,0.3); /* 输入框背景色 */
+  --waline-border-color: #d1d5db; /* 边框颜色 */
+  --waline-label-color: #6b7280; /* 标签文字颜色 */
+  --waline-text-color: #111827; /* 主要文本颜色 */
+/* 滚动条颜色变量 (日间模式) */
+  --scrollbar-thumb-bg: rgba(0,0,0,0.35);
 }
-/* --- 整体布局与间距 --- */
+/*
+ * -------------------------------------------------------------------
+ * [2] 整体布局与间距 (Main Layout & Spacing)
+ * -------------------------------------------------------------------
+ * 调整网站在宽屏设备上的主干布局。
+ */
 @media (min-width: 1000px) {
   .main {
     max-width: 1000px;
-/* 修正：将顶部间距设为 18px，左右自动，底部为0 */
-    margin: 18px auto 0 auto !important;
-    float: none !important;
+    margin: 18px auto 0 auto !important; /* 顶部留出间距，左右自动居中 */
+    float: none !important; /* 清除主题默认的浮动布局 */
   }
   .footer-inner {
     max-width: 1000px;
     margin: 0 auto;
   }
 }
-/* --- 容器圆角 --- */
-/* 站点头部区域 */
-.header {
-  border-radius: var(--custom-border-radius) !important;
-  overflow: hidden; /* 裁剪内部溢出的直角元素 */
-}
-/* 侧边栏内部容器 */
-.sidebar-inner {
-  border-radius: var(--custom-border-radius) !important;
-  overflow: hidden; /* 裁剪内部溢出的直角元素 */
-}
-/* 文章区块 */
-.post-block {
-  border-radius: var(--custom-border-radius) !important;
-}
-/* --- 细节与插件元素圆角 --- */
-/* 文章内的图片 */
-.post-body img {
-  border-radius: var(--custom-border-radius-small) !important;
-}
-/* 返回顶部按钮 */
-.back-to-top {
-  border-radius: var(--custom-border-radius-small) !important;
-}
-/* 评论区 (增强选择器) */
-.comments,
-.v[data-class=v] .vwrap,
-#waline {
-/* 直接针对 Waline 的 ID */
-  border-radius: var(--custom-border-radius) !important;
-  overflow: hidden;
-}
-/* --- 字体与文章间距调整 --- */
-.post-body {
-  font-size: 0.9em;
-}
-.post-title-link {
-  font-size: 0.95em;
-}
-.post-header {
-  margin-bottom: 0px !important;
-}
-/* --- 页脚内容居中 --- */
-.footer-inner {
-  text-align: center;
-}
-/* --- 版权声明卡片美化 --- */
-.post-copyright ul {
-  position: relative;
-  list-style: none;
-  overflow: hidden;
-  padding: 1em 1.5em;
-  background: rgba(255,255,255,0.5); /* 适配半透明效果 */
-  border-left: 4px solid #3498db;
-  border-radius: var(--custom-border-radius-small, 8px);
-  box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05);
-}
-.post-copyright li {
-  line-height: 1.8;
-  position: relative;
-  z-index: 1;
-  font-size: 0.95em;
-}
-/* 修复：精确控制头像样式，防止边缘被裁切 */
-.site-author-image {
-  display: block;
-  margin: 5px auto 10px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-/* 添加一个透明边框作为缓冲区，防止父容器的 overflow:hidden 裁切到图像本身 */
-  border: 2px solid transparent;
-  box-sizing: border-box; /* 确保边框包含在100px的尺寸内 */
-}
 /*
- * ===================================================================
- * 新：背景模糊与内容半透明效果 (最终修复版)
- * ===================================================================
+ * -------------------------------------------------------------------
+ * [3] 全局视觉效果 (Global Visual Effects)
+ * -------------------------------------------------------------------
+ * 定义了网站的背景模糊效果和容器的毛玻璃质感。
  */
-/* 1. 使用伪元素创建全局模糊背景 */
+/* 3.1. 全局模糊背景 */
 body::before {
   content: '';
-  position: fixed;
+  position: fixed; /* 固定定位，使其覆盖整个视口 */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: -1;
+  z-index: -1; /* 将其置于所有内容的底层 */
+/* 背景图设置 */
   background: url("https://s21.ax1x.com/2025/08/01/pVNEIE9.jpg");
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; /* 背景图不随滚动条滚动 */
   background-size: cover;
   background-position: center;
-  filter: blur(8px);
-  transform: scale(1.05);
+/* 视觉效果 */
+  filter: blur(8px); /* 应用高斯模糊 */
+  transform: scale(1.05); /* 轻微放大，防止模糊后边缘出现白边 */
 }
-/* 2. 将 body 设置为 flex 容器以解决短页面底部空白问题 */
+/* 3.2. Body 基础设置 */
 body {
-  background: none !important; /* 必须设置，否则会覆盖模糊的伪元素 */
+  background: none !important; /* 必须移除 body 的背景，以透出伪元素的模糊背景 */
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100vh; /* 确保 body 至少有视口那么高，解决短页面页脚不贴底的问题 */
 }
-/* 3. 让主内容区自动伸展，将页脚推到底部 */
+/* 3.3. 主内容区伸展 */
 main.main {
-  flex-grow: 1;
+  flex-grow: 1; /* 让 main 区域占据所有剩余空间，将页脚推向底部 */
 }
-/* 4. 恢复头部区域的单独背景图 */
+/* 3.4. 容器毛玻璃效果 & 圆角 */
+.header,
+.sidebar-inner,
+.post-block,
+#waline {
+/* 将 Waline 评论区也纳入统一风格 */
+/* 圆角 */
+  border-radius: var(--custom-border-radius) !important;
+/* 毛玻璃背景 (日间模式) */
+  background: rgba(255,255,255,0.9) !important; /* 使用半透明背景 */
+/* 核心：背景滤镜实现毛玻璃效果 */
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+/* 样式调整 */
+  overflow: hidden; /* 隐藏溢出的子元素，确保圆角生效 */
+  border: none; /* 移除原有边框 */
+  box-shadow: 0 4px 15px 0 rgba(0,0,0,0.1); /* 使用阴影定义轮廓，增加立体感 */
+}
+/* 3.5. 清理不必要的容器背景 */
+.main-inner {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+/* 3.6. 站点头部独立背景图 */
 .site-brand-container {
   background: url("https://s21.ax1x.com/2025/08/01/pVNVYVJ.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
 }
-/* 5. 为内容容器添加毛玻璃效果 */
-/* 将背景和模糊效果直接应用到 header, sidebar-inner, post-block 和评论区 */
-.header,
-.sidebar-inner,
-.post-block,
-#waline {
-/* 浅色模式：半透明白色背景 */
-/* 使用 !important 强制覆盖主题默认的纯白背景，确保毛玻璃效果可见 */
-  background: rgba(255,255,255,0.9) !important;
-/* 核心：重新添加高斯模糊效果 */
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-/* 移除边框，使用阴影来定义轮廓 */
-  border: none;
-  box-shadow: 0 4px 15px 0 rgba(0,0,0,0.1);
-}
-/* 6. 移除 .main-inner 的背景，它只作为布局容器 */
-.main-inner {
-  background: none;
-  border: none;
-  box-shadow: none;
-}
-/* 7. 适配暗黑模式下的毛玻璃效果 */
-.darkmode--activated .header,
-.darkmode--activated .sidebar-inner,
-.darkmode--activated .post-block,
-.darkmode--activated #waline {
-/* 暗色模式：半透明深色背景 */
-  background: rgba(40,40,40,0.85) !important;
-  border: none;
-}
-/* 8. 修正暗黑模式下版权声明的背景 */
-.darkmode--activated .post-copyright ul {
-  background: rgba(0,0,0,0.2);
-}
-/* 9. 确保 post-block 和评论区内有足够的间距 */
+/*
+ * -------------------------------------------------------------------
+ * [4] 组件与元素样式 (Components & Elements)
+ * -------------------------------------------------------------------
+ * 对页面中具体的元素进行样式微调。
+ */
+/* 4.1. 文章相关 */
 .post-block {
-  padding: 25px; /* 可以根据喜好调整 */
+  padding: 25px; /* 为文章容器增加内边距 */
 }
+.post-body {
+  font-size: 0.9em; /* 调整文章正文的字体大小 */
+}
+.post-title-link {
+  font-size: 0.95em; /* 调整文章标题的字体大小 */
+}
+.post-header {
+  margin-bottom: 0px !important; /* 移除文章头部的下外边距 */
+}
+.post-body img {
+  border-radius: var(--custom-border-radius-small) !important; /* 文章内图片圆角 */
+}
+/* 4.2. 侧边栏作者头像 */
+.site-author-image {
+  display: block;
+  margin: 5px auto 10px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* 保持圆形 */
+  border: 2px solid transparent; /* 添加透明边框，防止被父容器的 overflow:hidden 裁切 */
+  box-sizing: border-box;
+}
+/* 4.3. 版权声明卡片 */
+.post-copyright ul {
+  list-style: none;
+  overflow: hidden;
+  padding: 1em 1.5em;
+  background: rgba(255,255,255,0.5); /* 半透明背景 */
+  border-left: 4px solid #3498db;
+  border-radius: var(--custom-border-radius-small);
+  box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05);
+}
+.post-copyright li {
+  line-height: 1.8;
+  font-size: 0.95em;
+}
+/* 4.4. 其他元素 */
+.back-to-top {
+  border-radius: var(--custom-border-radius-small) !important; /* "返回顶部"按钮圆角 */
+}
+.footer-inner {
+  text-align: center; /* 页脚内容居中 */
+}
+/*
+ * -------------------------------------------------------------------
+ * [5] Waline 评论区美化 (Waline Comment Section)
+ * -------------------------------------------------------------------
+ * 对 Waline 评论插件进行深度定制，以匹配整体主题风格。
+ */
+/* 5.1. 容器与布局重置 */
 #waline {
   padding: 25px;
-  margin-top: 20px; /* 为评论区添加顶部外边距，与文章内容分开 */
+  margin-top: 20px; /* 与文章内容区创建间距 */
 }
-/* 10. 注意：此处已移除对 .footer 的任何样式修改，以保持其原始外观 */
-/*
- * ===================================================================
- * Waline 评论区美化 (V16 - 强制布局修正版)
- * ===================================================================
- */
-/* --- 通用布局与结构 (日间/夜间共用) --- */
-/* 移除 Waline 可能自带的内部背景和边框 */
+/* 移除 Waline 自带的背景、边框和阴影，以便融入毛玻璃效果 */
 #waline .wl-panel,
 #waline .wl-card {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
 }
-/* 评论编辑区整体面板 */
 #waline .wl-comment {
   border: none !important;
   padding: 0;
   background-color: transparent !important;
 }
-/* 强制重置评论面板布局，覆盖 Waline 默认的 flex 布局 */
+/* 5.2. 评论输入区布局调整 */
+/* 强制重置 Waline 面板布局，以解决默认 flex 布局带来的问题 */
 #waline .wl-panel {
   display: block !important;
 }
-/* 用户信息输入行 */
+/* 使用 Grid 布局重排用户信息输入行 */
 #waline .wl-header {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 三列等宽 */
   gap: 0;
-  margin-bottom: 1rem; /* 与下方编辑器拉开距离 */
+  margin-bottom: 1rem;
   border: 1px solid var(--waline-border-color);
   border-radius: 8px;
   overflow: hidden;
   background-color: var(--waline-input-bg);
 }
-/* 每个信息输入项 */
-#waline .wl-header-item {
-  position: relative;
-  padding: 0px;
-}
-/* 添加分割线 */
+/* 为输入项添加右侧分割线 */
 #waline .wl-header-item:not(:last-child) {
   border-right: 1px solid var(--waline-border-color);
 }
-/* 标签样式 */
-#waline .wl-header label {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--waline-label-color);
-  margin-bottom: 0.125rem;
-}
-/* 输入框样式 */
+/* 5.3. 输入框与文本域样式 */
 #waline .wl-input {
   width: 100%;
   background: transparent !important;
@@ -3146,14 +3137,12 @@ main.main {
 #waline .wl-input:focus {
   outline: none;
 }
-/* 主文本输入域 (在新的布局下将正常工作) */
+/* 主评论内容输入框 */
 #waline .wl-editor {
-/* 核心修正：确保其作为块级元素撑满宽度并移除默认边距 */
   display: block;
   width: 100%;
   box-sizing: border-box;
-  margin: 0; /* 新增：移除浏览器默认外边距，解决偏移问题 */
-/* 其他样式 */
+  margin: 0; /* 移除默认外边距 */
   resize: vertical;
   min-height: 120px;
   border-radius: 8px !important;
@@ -3167,56 +3156,67 @@ main.main {
   border-color: var(--waline-theme-color) !important;
   box-shadow: 0 0 0 2px var(--waline-theme-color-light);
 }
-/* 按钮和元信息标签的通用样式 */
-#waline .wl-btn {
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
+/* 5.4. 按钮与标签样式 */
 #waline .wl-btn.primary {
   border: none !important;
   transition: background-color 0.3s, transform 0.2s;
-}
-#waline .wl-btn.primary:hover {
-  transform: translateY(-1px);
-}
-#waline .wl-meta span {
-  border: none !important;
-  border-radius: 999px;
-  padding: 2px 8px;
-}
-/* --- 日间模式颜色 --- */
-:root {
-  --waline-theme-color: #3b82f6;
-  --waline-theme-color-light: rgba(59,130,246,0.2);
-  --waline-input-bg: rgba(255,255,255,0.3);
-  --waline-border-color: #d1d5db;
-  --waline-label-color: #6b7280;
-  --waline-text-color: #111827;
-}
-#waline .wl-nick {
-  font-weight: normal !important;
-}
-#waline .wl-meta span {
-  color: #4b5563 !important;
-  background-color: rgba(0,0,0,0.05) !important;
-}
-#waline .wl-btn.primary {
   background: var(--waline-theme-color) !important;
   color: #fff !important;
 }
 #waline .wl-btn.primary:hover {
+  transform: translateY(-1px);
   background: #2563eb !important;
 }
-/* --- 夜间模式颜色 --- */
+#waline .wl-meta span {
+/* "置顶", "博主"等标签 */
+  border: none !important;
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: #4b5563 !important;
+  background-color: rgba(0,0,0,0.05) !important;
+}
+#waline .wl-nick {
+  font-weight: normal !important; /* 取消昵称加粗 */
+}
+/*
+ * -------------------------------------------------------------------
+ * [6] 暗黑模式适配 (Dark Mode Adaptation)
+ * -------------------------------------------------------------------
+ * 覆盖日间模式的样式，以适配暗黑主题。
+ */
 .darkmode--activated {
+/* 6.1. 重定义颜色变量 (夜间模式) */
   --waline-theme-color: #60a5fa;
   --waline-theme-color-light: rgba(96,165,250,0.2);
   --waline-input-bg: rgba(0,0,0,0.2);
   --waline-border-color: #4b5563;
   --waline-label-color: #9ca3af;
   --waline-text-color: #e5e7eb;
+  --scrollbar-thumb-bg: rgba(255,255,255,0.35);
+/* 6.2. 容器毛玻璃效果 (夜间模式) */
+/* 6.3. 组件颜色适配 (夜间模式) */
+/* 6.4. Waline 评论区精细化颜色调整 (夜间模式) */
+}
+.darkmode--activated .header,
+.darkmode--activated .sidebar-inner,
+.darkmode--activated .post-block,
+.darkmode--activated #waline {
+  background: rgba(40,40,40,0.85) !important; /* 使用半透明深色背景 */
+  border: none;
+}
+.darkmode--activated .post-copyright ul {
+  background: rgba(0,0,0,0.2);
 }
 .darkmode--activated #waline {
   color: #d1d5db !important;
+/* placeholder 颜色 */
+/* 评论列表头部 */
+/* 排序选项 */
+/* 评论内容与昵称 */
+/* "置顶", "博主"等标签 */
+/* 时间 */
+/* 普通按钮 */
+/* 主要按钮 */
 }
 .darkmode--activated #waline .wl-editor::placeholder,
 .darkmode--activated #waline .wl-input::placeholder {
@@ -3233,16 +3233,9 @@ main.main {
 .darkmode--activated #waline .wl-sort li.active {
   color: #fff !important;
 }
-.darkmode--activated #waline .wl-actions .wl-action {
-  color: #a0a0a0 !important;
-}
-.darkmode--activated #waline .wl-actions .wl-action:hover {
-  color: #fff !important;
-}
 .darkmode--activated #waline .wl-content p,
 .darkmode--activated #waline .wl-nick {
   color: #d1d5db !important;
-  font-weight: normal !important;
 }
 .darkmode--activated #waline .wl-meta span {
   color: #9ca3af !important;
@@ -3250,12 +3243,6 @@ main.main {
 }
 .darkmode--activated #waline .wl-time {
   color: #9ca3af !important;
-}
-.darkmode--activated #waline .wl-card .wl-comment-actions button {
-  color: #a0a0a0 !important;
-}
-.darkmode--activated #waline .wl-card .wl-comment-actions button:hover {
-  color: #34d399 !important;
 }
 .darkmode--activated #waline .wl-btn {
   border: 1px solid #4b5563 !important;
@@ -3272,4 +3259,44 @@ main.main {
 }
 .darkmode--activated #waline .wl-btn.primary:hover {
   background: #3b82f6 !important;
+}
+/*
+ * -------------------------------------------------------------------
+ * [7] SimpleBar.js 自定义悬浮滚动条样式
+ * -------------------------------------------------------------------
+ * 这部分代码为 SimpleBar 库生成的滚动条提供样式。
+ * 它将实现一个平时隐藏，滚动时平滑浮现的纤细滚动条。
+ */
+/* 强制隐藏原始的浏览器滚动条，以防 SimpleBar 未能完全覆盖 */
+body::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For IE and Edge */
+}
+/* 轨道整体样式，增加右边距，让滚动条不贴边 */
+.simplebar-track.simplebar-vertical {
+  right: 2px;
+  width: 6px;
+}
+/* 滑块的样式 */
+.simplebar-scrollbar::before {
+/* 使用我们定义的颜色变量 */
+  background: var(--scrollbar-thumb-bg);
+/* 设置圆角 */
+  border-radius: 3px;
+/* 初始状态完全透明 */
+  opacity: 0;
+/* 关键：为透明度变化添加平滑、自然的过渡效果 */
+  transition: opacity 0.3s ease-out;
+/* 确保滑块在轨道内，而不是从轨道边缘开始 */
+  left: 0;
+  right: 0;
+}
+/* 当页面处于滚动状态时，让滑块浮现 */
+.simplebar-scrollable.is-scrolling .simplebar-scrollbar::before {
+  opacity: 1;
+/* 滚动停止后，延迟一段时间再消失，优化体验 */
+  transition: opacity 0.3s 0.2s ease-out;
 }
