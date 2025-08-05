@@ -69,7 +69,8 @@
 
 
 
-<link rel="dns-prefetch" href="https://discussproject.vercel.app/">
+<link rel="dns-prefetch" href="https://discussproject.vercel.app/"><!-- APlayer CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" rel="stylesheet">
   <noscript>
     <link rel="stylesheet" href="/QingNoteblog/css/noscript.css">
   </noscript>
@@ -142,29 +143,37 @@
     </div>
   </div>
 <script>
+  /**
+   * @module DOM_Fixes
+   * @description 此模块包含针对页面 DOM 结构和元素层级问题的修复脚本。
+   */
+
   /*
    * -------------------------------------------------------------------
-   * [DOM Fix] 修复搜索弹窗层级问题
+   * [DOM 修复] 解决搜索弹窗的层叠上下文问题
    * -------------------------------------------------------------------
    *
    * 问题描述:
-   * Next 主题默认将搜索弹窗的 HTML 结构放置在 <header> 元素内部。
-   * 当我们对 <header> 应用 backdrop-filter 或 overflow:hidden 样式时，
-   * 会创建一个新的层叠上下文（Stacking Context），导致 position:fixed 的
-   * 搜索弹窗被限制在头部区域，无法全屏显示。
+   * Next 主题（或其他类似主题）默认将搜索弹窗的 HTML 结构（通常是 .search-pop-overlay 元素）
+   * 放置在 <header> 元素内部。当 <header> 应用了某些 CSS 属性（如 `backdrop-filter` 或 `overflow: hidden`）时，
+   * 会创建一个新的层叠上下文（Stacking Context）。这导致 `position: fixed` 的搜索弹窗
+   * 被限制在 `<header>` 区域内，无法全屏显示，尤其是在动画或滚动时出现裁剪。
    *
    * 解决方案:
-   * 此脚本会在页面加载完成后，查找搜索弹窗元素（.search-pop-overlay），
-   * 并将其从 <header> 内部移动到 <body> 的直接子元素层级。
-   * 这样就从根本上解决了层叠上下文的限制问题，无需再使用复杂的 CSS
-   * 补丁来处理动画时序。
+   * 为了从根本上解决层叠上下文的限制问题，此脚本在页面内容完全加载后（DOMContentLoaded 事件），
+   * 会查找 `.search-pop-overlay` 搜索弹窗元素，并将其从 `<header>` 内部移动到 `<body>` 的
+   * 直接子元素层级。这样，搜索弹窗就不再受限于父元素的层叠上下文，能够正确地全屏显示，
+   * 并且避免了使用复杂的 CSS 补丁来处理动画时序问题。
    */
   document.addEventListener('DOMContentLoaded', () => {
+    // 查找页面中的搜索弹窗元素
     const searchPopup = document.querySelector('.search-pop-overlay');
+    // 获取页面的 body 元素
     const body = document.body;
 
+    // 确保搜索弹窗和 body 元素都存在
     if (searchPopup && body) {
-      // 将搜索弹窗移动到 body 的末尾
+      // 将搜索弹窗元素移动到 body 的末尾，使其脱离原有的层叠上下文限制
       body.appendChild(searchPopup);
     }
   });
@@ -389,38 +398,62 @@
     <span title="站点阅读时长">21 分钟</span>
   </span>
 </div><div>
-<!--添加网站运行时间-->
-<span>小破站已经在风雨中度过了</span>
-<span id="timeDate">载入天数...</span>
-<span id="times">载入时分秒...</span>
-<script>
-    function createtime() {
-        const startTime = '07/29/2025 18:12:55',
-            start = new Date(startTime)
-        let mill = new Date() - start,
-            seconds = Math.floor(mill / 1000),
-            mins = Math.floor(seconds / 60),
-            hours = Math.floor(mins / 60),
-            days = Math.floor(hours / 24)
-        const time = {
-            seconds: seconds - mins * 60,
-            mins: mins - hours * 60,
-            hours: hours - days * 24,
+    <!-- 网站运行时间显示区域 -->
+    <span>小破站已经在风雨中度过了</span>
+    <span id="timeDate">载入天数...</span>
+    <span id="times">载入时分秒...</span>
+
+    <script>
+        /**
+         * @function createtime
+         * @description 计算并实时更新网站的已运行时间。
+         * 该函数每500毫秒执行一次，精确显示网站从指定启动时间至今的天、时、分、秒。
+         */
+        function createtime() {
+            // 定义网站的启动时间，格式为 'MM/DD/YYYY HH:MM:SS'
+            const startTime = '07/29/2025 18:12:55';
+            const start = new Date(startTime); // 将启动时间字符串转换为 Date 对象
+
+            // 计算当前时间与启动时间之间的时间差（毫秒）
+            let mill = new Date() - start;
+            // 将毫秒转换为秒
+            let seconds = Math.floor(mill / 1000);
+            // 将秒转换为分钟
+            let mins = Math.floor(seconds / 60);
+            // 将分钟转换为小时
+            let hours = Math.floor(mins / 60);
+            // 将小时转换为天数
+            let days = Math.floor(hours / 24);
+
+            // 计算剩余的秒、分钟和小时
+            const time = {
+                seconds: seconds - mins * 60,  // 当前分钟内的秒数
+                mins: mins - hours * 60,      // 当前小时内的分钟数
+                hours: hours - days * 24,     // 当前天数内的小时数
+            };
+
+            // 格式化时间，确保所有单位（秒、分、时）都至少是两位数（例如：5秒显示为05）
+            for (const k in time) {
+                time[k] = `${time[k]}`.padStart(2, '0');
+            }
+
+            // 更新显示天数的元素
+            document.getElementById("timeDate").innerHTML = ` ${days} 天`;
+            // 更新显示小时、分钟、秒的元素
+            document.getElementById("times").innerHTML = ` ${time.hours} 小时 ${time.mins} 分 ${time.seconds} 秒`;
         }
-        for (const k in time) {
-            time[k] = `${time[k]}`.padStart(2, '0')
-        }
-        document.getElementById("timeDate").innerHTML = ` ${days} 天`
-        document.getElementById("times").innerHTML = ` ${time.hours} 小时 ${time.mins} 分 ${time.seconds} 秒`
-    }
-    setInterval(createtime, 500)
-</script>
+
+        // 每500毫秒调用一次 createtime 函数，实现时间实时更新
+        setInterval(createtime, 500);
+    </script>
 </div>
 
 <!--
-<script color="0,0,0" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    如果您需要启用背景粒子动画效果，可以取消注释下方 <script> 标签。
+    该脚本引入了 canvas-nest.js 库，用于在页面上生成动态的线条连接粒子效果。
+    目前此功能处于禁用状态，以优化页面加载性能或满足特定设计需求。
 -->
-
+<!-- <script color="0,0,0" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script> -->
 
 
     </div>
@@ -472,6 +505,31 @@ var options = {
 const darkmode = new Darkmode(options);
 window.darkmode = darkmode;
 darkmode.showWidget();
+</script>
+<!-- APlayer 和 MetingJS 依赖 -->
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script>
+
+<!-- APlayer 持久化初始化脚本 -->
+<script>
+  function initAPlayer() {
+    if (document.querySelector('.aplayer')) {
+      return;
+    }
+    const metingElement = document.createElement('meting-js');
+    metingElement.setAttribute('id', '2692072963');
+    metingElement.setAttribute('server', 'netease');
+    metingElement.setAttribute('type', 'playlist');
+    metingElement.setAttribute('fixed', 'true');
+    metingElement.setAttribute('autoplay', 'false');
+    metingElement.setAttribute('order', 'list');
+    metingElement.setAttribute('volume', '0.55');
+    metingElement.setAttribute('theme', '#518AE7');
+    metingElement.setAttribute('preload', 'auto');
+    document.body.appendChild(metingElement);
+  }
+  document.addEventListener('DOMContentLoaded', () => setTimeout(initAPlayer, 300));
+  document.addEventListener('pjax:success', () => setTimeout(initAPlayer, 300));
 </script>
 
 </body>

@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #369aff;
+    background: #ffff78;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2909,394 +2909,963 @@ header.header {
 }
 /*
  * ===================================================================
- * 主题美化样式 (Optimized)
+ * 网站主题美化与功能增强样式
  * ===================================================================
  *
- * 说明: 
- * 本文件包含了对网站主题的深度美化，主要涵盖以下几个方面：
- * 1. 全局圆角与布局调整，实现现代化卡片式设计。
- * 2. 背景毛玻璃（Glassmorphism）效果，提升视觉层次感。
- * 3. 针对特定组件（如版权声明、Waline评论区）的精细化样式调整。
- * 4. 完整的日间/夜间双模式颜色适配。
- * 5. SimpleBar.js 驱动的悬浮滚动条样式（最终版）。
+ * 说明:
+ * 本文件包含了对网站主题的深度美化和功能增强样式定义。
+ * 主要涵盖以下几个核心方面，旨在提升用户体验和网站的视觉吸引力：
+ * 1. 全局圆角与布局的精细调整，实现现代化卡片式设计风格。
+ * 2. 引入背景毛玻璃（Glassmorphism）效果，增强页面的视觉层次感。
+ * 3. 针对网站内特定组件（如版权声明、Waline评论区、返回顶部按钮等）进行样式优化，
+ * 确保它们与整体设计语言保持高度一致。
+ * 4. 完整的日间/夜间双模式颜色适配方案，提供在不同光照条件下的舒适浏览体验。
+ *
  *
  * ===================================================================
  */
 /*
  * -------------------------------------------------------------------
- * [1] 全局变量定义 (Global Variables)
+ * 1. 全局变量定义
  * -------------------------------------------------------------------
- * 使用 CSS 变量来统一管理关键样式属性，便于后续快速调整。
+ * 本节定义了网站中常用的CSS变量（Custom Properties）。
+ * 使用这些变量能够实现样式属性的统一管理，便于后续进行快速调整、主题切换以及维护。
+ * 它们作为设计系统的基础，确保了视觉元素的一致性。
  */
 :root {
-/* 主要圆角尺寸，用于页面主容器，如头部、侧边栏、文章块等 */
-  --custom-border-radius: 12px;
-/* 次要圆角尺寸，用于内部小元素，如图片、按钮、代码块等 */
-  --custom-border-radius-small: 8px;
-/* Waline 评论区颜色变量 (日间模式) 
-   * 这些变量将在后续的 Waline 样式部分被广泛使用。
+/* --custom-border-radius:
+   * 定义了网站中主要容器元素（如页面头部、侧边栏、文章内容块等）的圆角大小。
+   * 较大的圆角有助于营造柔和、现代的卡片式设计风格。
    */
-  --waline-theme-color: #3b82f6; /* 主题色 (链接、高亮) */
-  --waline-theme-color-light: rgba(59,130,246,0.2); /* 主题色的浅色变体 (用于焦点阴影) */
-  --waline-input-bg: rgba(255,255,255,0.3); /* 输入框背景色 */
-  --waline-border-color: #d1d5db; /* 边框颜色 */
-  --waline-label-color: #6b7280; /* 标签文字颜色 */
-  --waline-text-color: #111827; /* 主要文本颜色 */
-/* 滚动条颜色变量 (日间模式) */
-  --scrollbar-thumb-bg: rgba(0,0,0,0.35);
+  --custom-border-radius: 12px;
+/* --custom-border-radius-small:
+   * 定义了网站中内部较小元素（如图片、交互按钮、代码块等）的圆角大小。
+   * 较小的圆角用于细节处理，保持整体圆润感的同时，区分不同层级的视觉元素。
+   */
+  --custom-border-radius-small: 8px;
+/* Waline 评论区颜色变量 (日间模式)
+   * 这些变量专门用于控制 Waline 评论组件在日间模式下的颜色方案。
+   * 它们覆盖了评论区的主题色、背景色、边框色和文本颜色，确保其与网站整体主题的无缝融合。
+   */
+  --waline-theme-color: #3b82f6;
+  --waline-theme-color-light: rgba(59,130,246,0.2);
+  --waline-input-bg: rgba(255,255,255,0.3);
+  --waline-border-color: #d1d5db;
+  --waline-label-color: #6b7280;
+  --waline-text-color: #111827;
 }
 /*
  * -------------------------------------------------------------------
- * [2] 整体布局与间距 (Main Layout & Spacing)
+ * 2. 整体布局与间距调整
  * -------------------------------------------------------------------
- * 调整网站在宽屏设备上的主干布局。
+ * 本节主要负责调整网站在宽屏设备上的主干布局结构。
+ * 目标是实现内容区域的居中显示，并设置最大宽度限制，以确保在不同屏幕尺寸下都能提供最佳的阅读体验。
  */
 @media (min-width: 1000px) {
   .main {
-    max-width: 1000px;
-    margin: 18px auto 0 auto !important; /* 顶部留出间距，左右自动居中 */
-    float: none !important; /* 清除主题默认的浮动布局 */
+    max-width: 1000px; /* 设置主内容区域的最大宽度为1000px，防止在超宽屏幕上内容过度拉伸。 */
+    margin: 18px auto 0 auto !important; /* 上边距为18px，左右外边距设置为auto实现水平居中，底部外边距为0。 */
+    float: none !important; /* 取消任何可能的浮动设置，确保 margin: auto 的居中效果正常工作。 */
   }
   .footer-inner {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1000px; /* 设置页脚内容区域的最大宽度，使其与主内容区域宽度对齐，保持页面整体的视觉平衡。 */
+    margin: 0 auto; /* 左右外边距设置为auto实现水平居中。 */
   }
 }
 /*
  * -------------------------------------------------------------------
- * [3] 全局视觉效果 (Global Visual Effects)
+ * 3. 全局视觉效果定义
  * -------------------------------------------------------------------
- * 定义了网站的背景模糊效果和容器的毛玻璃质感。
+ * 本节定义了网站的整体视觉风格，包括背景的模糊效果以及主要内容容器的毛玻璃质感。
+ * 这些效果共同提升了网站的现代感和视觉吸引力。
  */
-/* 3.1. 全局模糊背景 */
+/* 3.1. 全局模糊背景效果 (body::before) */
 body::before {
-  content: '';
-  position: fixed; /* 固定定位，使其覆盖整个视口 */
+  content: ''; /* 创建一个伪元素作为背景层。 */
+  position: fixed; /* 固定定位，确保背景图片不随页面滚动而移动。 */
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  z-index: -1; /* 将其置于所有内容的底层 */
-/* 背景图设置 */
-  background: url("https://s21.ax1x.com/2025/08/01/pVNEIE9.jpg");
-  background-repeat: no-repeat;
-  background-attachment: fixed; /* 背景图不随滚动条滚动 */
-  background-size: cover;
-  background-position: center;
-/* 视觉效果 */
-  filter: blur(8px); /* 应用高斯模糊 */
-  transform: scale(1.05); /* 轻微放大，防止模糊后边缘出现白边 */
+  bottom: 0; /* 使伪元素覆盖整个视口。 */
+  z-index: -1; /* 将背景层置于所有页面内容之下，避免遮挡。 */
+  background: url("https://s21.ax1x.com/2025/08/01/pVNEIE9.jpg"); /* 设置背景图片。 */
+  background-repeat: no-repeat; /* 背景图片不重复平铺。 */
+  background-attachment: fixed; /* 背景图片固定，不随滚动条滚动。 */
+  background-size: cover; /* 背景图片等比例缩放，覆盖整个元素区域，可能裁剪部分图片。 */
+  background-position: center; /* 背景图片居中显示。 */
+  filter: blur(8px); /* 对背景图片应用8像素的模糊效果，营造景深感。 */
+  transform: scale(1.05); /* 稍微放大背景图片，以避免模糊处理后边缘可能出现的空白或硬边。 */
 }
-/* 3.2. Body 基础设置 */
+/* 3.2. Body 元素的基础样式设置 */
 body {
-  background: none !important; /* 必须移除 body 的背景，以透出伪元素的模糊背景 */
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* 确保 body 至少有视口那么高，解决短页面页脚不贴底的问题 */
+  background: none !important; /* 移除 body 元素默认的背景色，确保伪元素背景层可见。 */
+  display: flex; /* 使用 Flexbox 布局模型。 */
+  flex-direction: column; /* 将 body 的子元素垂直方向排列。 */
+  min-height: 100vh; /* 设置 body 的最小高度为视口高度，确保即使内容较少，页脚也能保持在底部。 */
 }
-/* 3.3. 主内容区伸展 */
+/* 3.3. 主内容区 (.main) 伸展设置 */
 main.main {
-  flex-grow: 1; /* 让 main 区域占据所有剩余空间，将页脚推向底部 */
+  flex-grow: 1; /* 允许主内容区域在 Flex 容器中伸展，占据所有可用垂直空间，将页脚推至底部。 */
 }
-/* 3.4. 容器毛玻璃效果 & 圆角 */
+/* 3.4. 容器毛玻璃效果与圆角 (Header, Sidebar, Post Block, Waline) */
+/* 对网站中主要的卡片式内容容器（如头部导航、侧边栏、文章内容块、Waline评论区）应用统一的毛玻璃效果和圆角。 */
 .header,
 .sidebar-inner,
 .post-block,
 #waline {
-/* 将 Waline 评论区也纳入统一风格 */
-/* 圆角 */
-  border-radius: var(--custom-border-radius) !important;
-/* 毛玻璃背景 (日间模式) */
-  background: rgba(255,255,255,0.9) !important; /* 使用半透明背景 */
-/* 核心：背景滤镜实现毛玻璃效果 */
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-/* 样式调整 */
-  overflow: hidden; /* 隐藏溢出的子元素，确保圆角生效 */
-  border: none; /* 移除原有边框 */
-  box-shadow: 0 4px 15px 0 rgba(0,0,0,0.1); /* 使用阴影定义轮廓，增加立体感 */
+  border-radius: var(--custom-border-radius) !important; /* 应用全局定义的大圆角。 */
+  background: rgba(255,255,255,0.9) !important; /* 设置半透明白色背景，这是毛玻璃效果的基础。 */
+  -webkit-backdrop-filter: blur(10px); /* 针对 Webkit 浏览器（如 Chrome, Safari）的背景模糊效果。 */
+  backdrop-filter: blur(10px); /* 标准的背景模糊效果，使背景内容透过半透明容器呈现模糊效果。 */
+  overflow: hidden; /* 隐藏超出容器边界的内容，确保圆角效果的完整性。 */
+  border: none; /* 移除默认的边框。 */
+  box-shadow: 0 4px 15px 0 rgba(0,0,0,0.1); /* 添加柔和的阴影效果，增加元素的立体感。 */
 }
 /* 3.5. 清理不必要的容器背景 */
+/* 移除主内容内部容器 (.main-inner) 的背景、边框和阴影。
+ * 这是为了避免与外部容器的毛玻璃效果和阴影重复，导致视觉上的冗余或冲突。
+ */
 .main-inner {
-  background: none;
-  border: none;
-  box-shadow: none;
+  background: none; /* 移除背景。 */
+  border: none; /* 移除边框。 */
+  box-shadow: none; /* 移除阴影。 */
 }
 /* 3.6. 站点头部独立背景图 */
+/* 为网站品牌容器 (.site-brand-container) 设置独立的背景图片。
+ * 这使得网站头部能够拥有独特的视觉标识，与整体的毛玻璃效果形成对比或补充。
+ */
 .site-brand-container {
-  background: url("https://s21.ax1x.com/2025/08/01/pVNVYVJ.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  background: url("https://s21.ax1x.com/2025/08/01/pVNVYVJ.jpg"); /* 设置站点头部的背景图片。 */
+  background-repeat: no-repeat; /* 背景图片不重复平铺。 */
+  background-size: cover; /* 背景图片覆盖整个元素区域。 */
+  background-position: center; /* 背景图片居中显示。 */
 }
 /*
  * -------------------------------------------------------------------
- * [4] 组件与元素样式 (Components & Elements)
+ * 4. 组件与元素样式调整
  * -------------------------------------------------------------------
- * 对页面中具体的元素进行样式微调。
+ * 本节针对网站中各个独立的组件和通用元素进行精细化的样式调整。
+ * 旨在优化它们的视觉表现和用户体验，使其更好地融入整体设计。
  */
-/* 4.1. 文章相关 */
+/* 文章块 (.post-block) 内边距 */
 .post-block {
-  padding: 25px; /* 为文章容器增加内边距 */
+  padding: 25px; /* 增加文章内容块的内边距，为文本和图片提供更舒适的留白空间，提升阅读舒适度。 */
 }
+/* 文章正文 (.post-body) 字体大小 */
 .post-body {
-  font-size: 0.9em; /* 调整文章正文的字体大小 */
+  font-size: 0.9em; /* 调整文章正文的字体大小，使其在视觉上更易于阅读和扫描。 */
 }
+/* 文章标题链接 (.post-title-link) 字体大小 */
 .post-title-link {
-  font-size: 0.95em; /* 调整文章标题的字体大小 */
+  font-size: 0.95em; /* 调整文章标题链接的字体大小，使其在列表或卡片中更显眼。 */
 }
+/* 文章头部 (.post-header) 下边距 */
 .post-header {
-  margin-bottom: 0px !important; /* 移除文章头部的下外边距 */
+  margin-bottom: 0px !important; /* 移除文章头部的默认下边距，以实现更紧凑的布局或与其他元素的精确对齐。 */
 }
+/* 文章正文图片 (.post-body img) 圆角 */
 .post-body img {
-  border-radius: var(--custom-border-radius-small) !important; /* 文章内图片圆角 */
+  border-radius: var(--custom-border-radius-small) !important; /* 对文章正文中的所有图片应用自定义的小圆角，保持视觉一致性。 */
 }
-/* 4.2. 侧边栏作者头像 */
+/* 站点作者头像 (.site-author-image) 样式 */
 .site-author-image {
-  display: block;
-  margin: 5px auto 10px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%; /* 保持圆形 */
-  border: 2px solid transparent; /* 添加透明边框，防止被父容器的 overflow:hidden 裁切 */
-  box-sizing: border-box;
+  display: block; /* 将头像设置为块级元素，以便于使用 margin: auto 进行居中。 */
+  margin: 5px auto 10px; /* 上边距5px，左右自动居中，下边距10px，用于定位头像。 */
+  width: 100px; /* 设置头像的固定宽度。 */
+  height: 100px; /* 设置头像的固定高度。 */
+  border-radius: 50%; /* 将头像设置为完美的圆形。 */
+  border: 2px solid transparent; /* 添加一个透明边框，可在悬停等状态下改变颜色，增加交互效果。 */
+  box-sizing: border-box; /* 确保边框和内边距包含在元素的总宽度和高度内。 */
 }
-/* 4.3. 版权声明卡片 */
+/* 文章版权信息列表 (.post-copyright ul) 样式 */
 .post-copyright ul {
-  list-style: none;
-  overflow: hidden;
-  padding: 1em 1.5em;
-  background: rgba(255,255,255,0.5); /* 半透明背景 */
-  border-left: 4px solid #3498db;
-  border-radius: var(--custom-border-radius-small);
-  box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05);
+  list-style: none; /* 移除列表项默认的符号（如圆点）。 */
+  overflow: hidden; /* 隐藏任何超出列表容器边界的内容，确保圆角效果。 */
+  padding: 1em 1.5em; /* 设置列表的内边距，提供内容与边框之间的空间。 */
+  background: rgba(255,255,255,0.5); /* 设置半透明白色背景，与毛玻璃主题相呼应。 */
+  border-left: 4px solid #3498db; /* 添加一个醒目的左侧蓝色边框，作为版权信息的视觉强调。 */
+  border-radius: var(--custom-border-radius-small); /* 应用自定义的小圆角。 */
+  box-shadow: 0 2px 10px -3px rgba(0,0,0,0.05); /* 添加一个轻微的阴影效果，使其略微浮起。 */
 }
+/* 文章版权信息列表项 (.post-copyright li) 行高和字体大小 */
 .post-copyright li {
-  line-height: 1.8;
-  font-size: 0.95em;
+  line-height: 1.8; /* 增加行高，提升文本的可读性。 */
+  font-size: 0.95em; /* 调整字体大小。 */
 }
-/* 4.4. 其他元素 */
+/* 返回顶部按钮 (.back-to-top) 样式 */
+/* 本节定义了“返回顶部”按钮的完整样式，包括其尺寸、定位、外观、动画效果以及内部元素的布局。 */
 .back-to-top {
-  border-radius: var(--custom-border-radius-small) !important; /* "返回顶部"按钮圆角 */
+/* 尺寸与定位 */
+  width: 50px !important; /* 强制设置按钮宽度。 */
+  height: 50px !important; /* 强制设置按钮高度。 */
+  left: unset !important; /* 确保按钮不被左侧定位属性影响。 */
+  right: 32px !important; /* 将按钮固定在视口右侧32像素的位置。 */
+  bottom: 100px !important; /* 将按钮固定在视口底部100像素的位置。 */
+/* 布局与外观 */
+  display: flex !important; /* 使用 Flexbox 布局，方便内部图标和文本的对齐。 */
+  flex-direction: column !important; /* 内部元素垂直排列。 */
+  justify-content: center !important; /* 内部元素垂直居中。 */
+  align-items: center !important; /* 内部元素水平居中。 */
+  padding: 0 !important; /* 移除按钮内部的内边距。 */
+  border-radius: 50% !important; /* 将按钮形状设置为完美的圆形。 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12) !important; /* 添加柔和的阴影效果。 */
+  color: #333 !important; /* 设置按钮内部文本和图标的颜色。 */
+  background: #fff !important; /* 设置按钮的背景色为不透明白色。 */
+  -webkit-backdrop-filter: none !important; /* 移除 Webkit 浏览器的背景模糊效果，确保按钮自身清晰。 */
+  backdrop-filter: none !important; /* 移除标准背景模糊效果。 */
+  border: 1px solid rgba(0,0,0,0.08) !important; /* 添加一个浅色边框。 */
+/* 动画效果 */
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease; /* 定义透明度、形变和阴影的平滑过渡动画。 */
+  opacity: 0; /* 默认状态下按钮是完全透明的（隐藏）。 */
+  transform: translateY(20px); /* 默认状态下按钮向下偏移20px。 */
+  pointer-events: none; /* 默认状态下不响应鼠标事件，防止误触。 */
+  position: fixed !important; /* 确保按钮相对于视口固定定位。 */
 }
+/* 返回顶部按钮激活状态：当按钮可见时 */
+.back-to-top.back-to-top-on {
+  opacity: 1; /* 当添加 'back-to-top-on' 类时，按钮完全显示。 */
+  transform: translateY(0); /* 按钮恢复到原始垂直位置。 */
+  pointer-events: auto; /* 按钮开始响应鼠标事件。 */
+}
+/* 返回顶部按钮悬停效果 */
+.back-to-top.back-to-top-on:hover {
+  transform: translateY(-2px); /* 鼠标悬停时，按钮向上轻微移动，提供反馈。 */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.18) !important; /* 鼠标悬停时，阴影加深，增强立体感。 */
+}
+/* 返回顶部按钮内部元素样式调整：箭头图标 */
+.back-to-top .fa-arrow-up {
+  font-size: 16px !important; /* 设置箭头图标的字体大小。 */
+  line-height: 1 !important; /* 设置行高，确保图标垂直居中。 */
+  margin-bottom: 2px; /* 在图标下方添加少量外边距，与百分比文本分隔。 */
+}
+/* 返回顶部按钮内部元素样式调整：百分比文本 */
+.back-to-top span {
+  font-size: 11px !important; /* 设置百分比文本的字体大小。 */
+  line-height: 1 !important; /* 设置行高。 */
+  display: block; /* 将文本设置为块级元素。 */
+  width: 100%; /* 宽度占满父元素。 */
+  text-align: center; /* 文本水平居中。 */
+  margin: 0 !important; /* 移除外边距。 */
+  padding: 0 !important; /* 移除内边距。 */
+}
+/* 日夜间切换按钮 (.darkmode-toggle) 样式 */
+/* 本节定义了日夜间模式切换按钮的样式，确保其尺寸、外观和交互与“返回顶部”按钮保持一致的设计语言。 */
+.darkmode-toggle {
+/* 统一尺寸 */
+  width: 50px !important; /* 强制设置按钮宽度。 */
+  height: 50px !important; /* 强制设置按钮高度。 */
+  box-sizing: border-box !important; /* 确保盒子模型一致，边框和内边距包含在尺寸内。 */
+  background: #fff !important; /* 统一为不透明白色背景。 */
+  -webkit-backdrop-filter: none !important; /* 移除 Webkit 模糊效果。 */
+  backdrop-filter: none !important; /* 移除标准模糊效果。 */
+  border: 1px solid rgba(0,0,0,0.08) !important; /* 统一浅色边框。 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12) !important; /* 统一阴影效果。 */
+  transition: all 0.3s ease; /* 定义所有属性的平滑过渡动画。 */
+}
+/* 日夜间切换按钮悬停效果 */
+.darkmode-toggle:hover {
+  transform: translateY(-2px); /* 鼠标悬停时，按钮向上轻微移动。 */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.18) !important; /* 鼠标悬停时，阴影加深。 */
+}
+/* 页脚内部文本居中 */
 .footer-inner {
-  text-align: center; /* 页脚内容居中 */
+  text-align: center; /* 确保页脚内部的所有文本内容水平居中显示。 */
 }
 /*
  * -------------------------------------------------------------------
- * [5] Waline 评论区美化 (Waline Comment Section)
+ * 5. Waline 评论区美化
  * -------------------------------------------------------------------
- * 对 Waline 评论插件进行深度定制，以匹配整体主题风格。
+ * 本节专门针对 Waline 评论组件进行样式调整。
+ * 目标是使其外观与网站的整体设计风格（特别是毛玻璃和圆角主题）保持高度一致，
+ * 提升评论区的视觉集成度和用户体验。
  */
-/* 5.1. 容器与布局重置 */
+/* Waline 评论区容器 (#waline) 内边距和上边距 */
 #waline {
-  padding: 25px;
-  margin-top: 20px; /* 与文章内容区创建间距 */
+  padding: 25px; /* 设置评论区容器的内边距。 */
+  margin-top: 20px; /* 设置评论区容器的上边距，与上方内容分隔。 */
 }
-/* 移除 Waline 自带的背景、边框和阴影，以便融入毛玻璃效果 */
+/* Waline 面板和卡片背景与边框清理 */
+/* 移除 Waline 内部默认的背景、边框和阴影，以便应用统一的毛玻璃效果。 */
 #waline .wl-panel,
 #waline .wl-card {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: none !important; /* 移除背景。 */
+  border: none !important; /* 移除边框。 */
+  box-shadow: none !important; /* 移除阴影。 */
 }
+/* Waline 评论项 (.wl-comment) 样式 */
 #waline .wl-comment {
-  border: none !important;
-  padding: 0;
-  background-color: transparent !important;
+  border: none !important; /* 移除评论项的边框。 */
+  padding: 0; /* 移除评论项的内边距。 */
+  background-color: transparent !important; /* 设置评论项背景为透明。 */
 }
-/* 5.2. 评论输入区布局调整 */
-/* 强制重置 Waline 面板布局，以解决默认 flex 布局带来的问题 */
+/* Waline 面板 (.wl-panel) 显示方式 */
 #waline .wl-panel {
-  display: block !important;
+  display: block !important; /* 强制面板以块级元素显示。 */
 }
-/* 使用 Grid 布局重排用户信息输入行 */
+/* Waline 头部 (.wl-header) 布局 */
 #waline .wl-header {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 三列等宽 */
-  gap: 0;
-  margin-bottom: 1rem;
-  border: 1px solid var(--waline-border-color);
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: var(--waline-input-bg);
+  display: grid; /* 使用 CSS Grid 布局来排列头部元素。 */
+  grid-template-columns: repeat(3, 1fr); /* 将头部区域分为三列等宽。 */
+  gap: 0; /* 列之间没有间隙。 */
+  margin-bottom: 1rem; /* 头部下方留出空间。 */
+  border: 1px solid var(--waline-border-color); /* 头部边框。 */
+  border-radius: 8px; /* 头部圆角。 */
+  overflow: hidden; /* 隐藏超出边界的内容。 */
+  background-color: var(--waline-input-bg); /* 头部背景色，与输入框背景色一致。 */
 }
-/* 为输入项添加右侧分割线 */
+/* Waline 头部项分隔线 */
 #waline .wl-header-item:not(:last-child) {
-  border-right: 1px solid var(--waline-border-color);
+  border-right: 1px solid var(--waline-border-color); /* 为除最后一项外的头部项添加右侧边框作为分隔线。 */
 }
-/* 5.3. 输入框与文本域样式 */
+/* Waline 输入框 (.wl-input) 样式 */
 #waline .wl-input {
-  width: 100%;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  height: auto !important;
-  color: var(--waline-text-color);
+  width: 100%; /* 宽度占满父容器。 */
+  background: transparent !important; /* 背景透明。 */
+  border: none !important; /* 移除边框。 */
+  padding: 0 !important; /* 移除内边距。 */
+  height: auto !important; /* 高度自适应内容。 */
+  color: var(--waline-text-color); /* 文本颜色。 */
 }
+/* Waline 输入框焦点状态 */
 #waline .wl-input:focus {
-  outline: none;
+  outline: none; /* 移除默认的焦点轮廓。 */
 }
-/* 主评论内容输入框 */
+/* Waline 编辑器 (.wl-editor) 样式 */
 #waline .wl-editor {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0; /* 移除默认外边距 */
-  resize: vertical;
-  min-height: 120px;
-  border-radius: 8px !important;
-  padding: 0.75rem !important;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  border: 1px solid var(--waline-border-color);
-  background-color: var(--waline-input-bg);
-  color: var(--waline-text-color);
+  display: block; /* 块级显示。 */
+  width: 100%; /* 宽度占满。 */
+  box-sizing: border-box; /* 边框和内边距包含在尺寸内。 */
+  margin: 0; /* 移除外边距。 */
+  resize: vertical; /* 允许用户垂直方向调整编辑器大小。 */
+  min-height: 120px; /* 设置编辑器的最小高度。 */
+  border-radius: 8px !important; /* 应用圆角。 */
+  padding: 0.75rem !important; /* 设置内边距。 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 边框颜色和阴影的过渡动画。 */
+  border: 1px solid var(--waline-border-color); /* 边框。 */
+  background-color: var(--waline-input-bg); /* 背景色。 */
+  color: var(--waline-text-color); /* 文本颜色。 */
 }
+/* Waline 编辑器焦点状态 */
 #waline .wl-editor:focus {
-  border-color: var(--waline-theme-color) !important;
-  box-shadow: 0 0 0 2px var(--waline-theme-color-light);
+  border-color: var(--waline-theme-color) !important; /* 焦点时边框颜色变为主题色。 */
+  box-shadow: 0 0 0 2px var(--waline-theme-color-light); /* 焦点时添加主题色的浅色阴影。 */
 }
-/* 5.4. 按钮与标签样式 */
+/* Waline 主要按钮 (.wl-btn.primary) 样式 */
 #waline .wl-btn.primary {
-  border: none !important;
-  transition: background-color 0.3s, transform 0.2s;
-  background: var(--waline-theme-color) !important;
-  color: #fff !important;
+  border: none !important; /* 移除边框。 */
+  transition: background-color 0.3s, transform 0.2s; /* 背景色和形变的过渡动画。 */
+  background: var(--waline-theme-color) !important; /* 背景色为主题色。 */
+  color: #fff !important; /* 文本颜色为白色。 */
 }
+/* Waline 主要按钮悬停效果 */
 #waline .wl-btn.primary:hover {
-  transform: translateY(-1px);
-  background: #2563eb !important;
+  transform: translateY(-1px); /* 鼠标悬停时向上轻微移动。 */
+  background: #2563eb !important; /* 悬停时背景色变深。 */
 }
+/* Waline 元信息标签 (.wl-meta span) 样式 */
 #waline .wl-meta span {
-/* "置顶", "博主"等标签 */
-  border: none !important;
-  border-radius: 999px;
-  padding: 2px 8px;
-  color: #4b5563 !important;
-  background-color: rgba(0,0,0,0.05) !important;
+  border: none !important; /* 移除边框。 */
+  border-radius: 999px; /* 极大圆角，形成胶囊形状的标签。 */
+  padding: 2px 8px; /* 内边距。 */
+  color: #4b5563 !important; /* 文本颜色。 */
+  background-color: rgba(0,0,0,0.05) !important; /* 半透明黑色背景。 */
 }
+/* Waline 昵称 (.wl-nick) 字体粗细 */
 #waline .wl-nick {
-  font-weight: normal !important; /* 取消昵称加粗 */
+  font-weight: normal !important; /* 设置昵称的字体粗细为正常。 */
 }
 /*
  * -------------------------------------------------------------------
- * [6] 暗黑模式适配 (Dark Mode Adaptation)
+ * 6. 暗黑模式适配
  * -------------------------------------------------------------------
- * 覆盖日间模式的样式，以适配暗黑主题。
+ * 本节定义了网站在暗黑模式（夜间模式）下的所有颜色方案和视觉调整。
+ * 旨在提供在低光照环境下更舒适的浏览体验，并确保所有UI元素在两种模式下都能保持和谐一致。
  */
 .darkmode--activated {
-/* 6.1. 重定义颜色变量 (夜间模式) */
+/* 6.1. 重定义 Waline 颜色变量 (夜间模式)
+     * 在暗黑模式下，重新定义 Waline 评论区所使用的颜色变量，以适应深色背景。
+     */
   --waline-theme-color: #60a5fa;
   --waline-theme-color-light: rgba(96,165,250,0.2);
   --waline-input-bg: rgba(0,0,0,0.2);
   --waline-border-color: #4b5563;
   --waline-label-color: #9ca3af;
   --waline-text-color: #e5e7eb;
-  --scrollbar-thumb-bg: rgba(255,255,255,0.35);
-/* 6.2. 容器毛玻璃效果 (夜间模式) */
-/* 6.3. 组件颜色适配 (夜间模式) */
-/* 6.4. Waline 评论区精细化颜色调整 (夜间模式) */
+/* 6.2. 容器毛玻璃效果 (夜间模式)
+     * 调整主要内容容器在夜间模式下的背景色，同时保持毛玻璃效果。
+     */
+/* 6.3. 组件颜色适配 (夜间模式)
+     * 调整文章版权信息列表在夜间模式下的背景色。
+     */
+/* 6.4. Waline 评论区精细化颜色调整 (夜间模式)
+     * 针对 Waline 评论区在暗黑模式下的各个元素进行详细的颜色适配。
+     */
+/* 6.5. SimpleBar 滚动条滑块颜色 (暗黑模式)
+     * 确保在暗黑模式下，自定义滚动条的滑块颜色也适配深色背景。
+     */
+/* 鼠标悬停在轨道上时，滑块颜色加深 (夜间模式) */
+/* 6.6. 返回顶部按钮适配 (夜间模式)
+     * 调整“返回顶部”按钮在暗黑模式下的背景、文本和阴影颜色。
+     */
+/* 6.7. 日夜间切换按钮适配 (夜间模式)
+     * 调整日夜间切换按钮在暗黑模式下的背景、边框和阴影颜色。
+     */
 }
 .darkmode--activated .header,
 .darkmode--activated .sidebar-inner,
 .darkmode--activated .post-block,
 .darkmode--activated #waline {
-  background: rgba(40,40,40,0.85) !important; /* 使用半透明深色背景 */
-  border: none;
+  background: rgba(40,40,40,0.85) !important; /* 设置半透明深灰色背景。 */
+  border: none; /* 移除边框。 */
 }
 .darkmode--activated .post-copyright ul {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0,0,0,0.2); /* 设置半透明黑色背景。 */
 }
 .darkmode--activated #waline {
-  color: #d1d5db !important;
-/* placeholder 颜色 */
-/* 评论列表头部 */
-/* 排序选项 */
-/* 评论内容与昵称 */
-/* "置顶", "博主"等标签 */
-/* 时间 */
-/* 普通按钮 */
-/* 主要按钮 */
+  color: #d1d5db !important; /* 评论区整体文本颜色。 */
 }
 .darkmode--activated #waline .wl-editor::placeholder,
 .darkmode--activated #waline .wl-input::placeholder {
-  color: #6b7280 !important;
+  color: #6b7280 !important; /* 占位符文本颜色。 */
 }
 .darkmode--activated #waline .wl-meta-head {
-  color: #d1d5db !important;
-  border-bottom-color: #4b5563 !important;
+  color: #d1d5db !important; /* 元信息头部文本颜色。 */
+  border-bottom-color: #4b5563 !important; /* 元信息头部下边框颜色。 */
 }
 .darkmode--activated #waline .wl-sort li {
-  color: #9ca3af;
+  color: #9ca3af; /* 排序列表项文本颜色。 */
 }
 .darkmode--activated #waline .wl-sort li:hover,
 .darkmode--activated #waline .wl-sort li.active {
-  color: #fff !important;
+  color: #fff !important; /* 排序列表项悬停和激活状态文本颜色。 */
 }
 .darkmode--activated #waline .wl-content p,
 .darkmode--activated #waline .wl-nick {
-  color: #d1d5db !important;
+  color: #d1d5db !important; /* 评论内容和昵称文本颜色。 */
 }
 .darkmode--activated #waline .wl-meta span {
-  color: #9ca3af !important;
-  background-color: rgba(255,255,255,0.08) !important;
+  color: #9ca3af !important; /* 元信息标签文本颜色。 */
+  background-color: rgba(255,255,255,0.08) !important; /* 元信息标签背景色。 */
 }
 .darkmode--activated #waline .wl-time {
-  color: #9ca3af !important;
+  color: #9ca3af !important; /* 时间文本颜色。 */
 }
 .darkmode--activated #waline .wl-btn {
-  border: 1px solid #4b5563 !important;
-  color: #d1d5db !important;
-  background: transparent !important;
+  border: 1px solid #4b5563 !important; /* 按钮边框。 */
+  color: #d1d5db !important; /* 按钮文本颜色。 */
+  background: transparent !important; /* 按钮背景透明。 */
 }
 .darkmode--activated #waline .wl-btn:hover {
-  background-color: rgba(255,255,255,0.1) !important;
-  border-color: #6b7280 !important;
+  background-color: rgba(255,255,255,0.1) !important; /* 按钮悬停背景色。 */
+  border-color: #6b7280 !important; /* 按钮悬停边框颜色。 */
 }
 .darkmode--activated #waline .wl-btn.primary {
-  background: var(--waline-theme-color) !important;
-  color: #fff !important;
+  background: var(--waline-theme-color) !important; /* 主要按钮背景色。 */
+  color: #fff !important; /* 主要按钮文本颜色。 */
 }
 .darkmode--activated #waline .wl-btn.primary:hover {
-  background: #3b82f6 !important;
+  background: #3b82f6 !important; /* 主要按钮悬停背景色。 */
+}
+.darkmode--activated .simplebar-scrollbar::before {
+  background-color: rgba(255,255,255,0.35); /* 夜间模式滚动条滑块颜色，半透明白色。 */
+}
+.darkmode--activated .simplebar-track.simplebar-vertical:hover .simplebar-scrollbar::before {
+  background-color: rgba(255,255,255,0.5);
+}
+.darkmode--activated .back-to-top {
+  background: #2c2c2c !important; /* 夜间模式背景色。 */
+  color: #f0f0f0 !important; /* 夜间模式字体颜色。 */
+  border: 1px solid rgba(255,255,255,0.1) !important; /* 夜间模式边框。 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important; /* 夜间模式阴影。 */
+}
+.darkmode--activated .back-to-top.back-to-top-on:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important; /* 夜间模式悬停阴影加深。 */
+}
+.darkmode--activated .darkmode-toggle {
+  box-sizing: border-box !important; /* 确保盒子模型一致。 */
+  background: #2c2c2c !important; /* 夜间模式背景色。 */
+  border: 1px solid rgba(255,255,255,0.1) !important; /* 夜间模式边框。 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important; /* 夜间模式阴影。 */
 }
 /*
  * -------------------------------------------------------------------
- * [7] SimpleBar.js 自定义悬浮滚动条样式
+ * 8. 统一按钮尺寸与盒子模型
  * -------------------------------------------------------------------
- * 这部分代码为 SimpleBar 库生成的滚动条提供样式。
- * 它将实现一个平时隐藏，滚动时平滑浮现的纤细滚动条。
+ * 本节旨在解决“返回顶部”按钮和“日夜间切换”按钮的尺寸一致性问题。
+ * 通过统一设置 `box-sizing` 属性为 `border-box`，确保按钮的最终渲染尺寸
+ * 不受内边距（padding）或边框（border）的影响，从而保证视觉上的一致性。
  */
-/* 强制隐藏原始的浏览器滚动条，以防 SimpleBar 未能完全覆盖 */
-body::-webkit-scrollbar {
-  display: none;
+.back-to-top,
+.darkmode-toggle {
+  box-sizing: border-box !important; /* 关键修复：统一使用 border-box 模型，使宽度和高度包含内边距和边框。 */
+  width: 50px !important; /* 统一设置宽度。 */
+  height: 50px !important; /* 统一设置高度。 */
 }
-html {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For IE and Edge */
+/* 确保夜间模式下统一尺寸的设置依然生效 */
+.darkmode--activated .back-to-top,
+.darkmode--activated .darkmode-toggle {
+  box-sizing: border-box !important;
 }
-/* 轨道整体样式，增加右边距，让滚动条不贴边 */
-.simplebar-track.simplebar-vertical {
-  right: 2px;
+/*
+ * -------------------------------------------------------------------
+ * 9. “阅读全文”按钮圆角微调
+ * -------------------------------------------------------------------
+ * 本节仅对“阅读全文”按钮的圆角进行修改。
+ * 目标是使其圆角样式与网站整体的视觉风格和圆角设计规范保持一致，提升细节美观度。
+ */
+.post-button .btn {
+  border-radius: var(--custom-border-radius-small) !important; /* 应用自定义的小圆角。 */
+}
+/*
+ * ===================================================================
+ * 10. APlayer 播放器美化样式 
+ * ===================================================================
+ */
+/* --- 1. APlayer 颜色变量定义 (与您的文件保持一致) --- */
+:root {
+  --aplayer-bg: rgba(255,255,255,0.96);
+  --aplayer-list-bg: rgba(255,255,255,0.94);
+  --aplayer-primary-text: #1f2937;
+  --aplayer-secondary-text: #4b5563;
+  --aplayer-border-color: rgba(0,0,0,0.06);
+  --aplayer-theme-color: #3b82f6;
+  --aplayer-list-item-hover: rgba(0,0,0,0.04);
+  --aplayer-list-item-active: rgba(59,130,246,0.1);
+  --aplayer-list-cur-bar: var(--aplayer-theme-color);
+  --aplayer-scrollbar-thumb: rgba(0,0,0,0.2);
+  --aplayer-scrollbar-thumb-hover: rgba(0,0,0,0.3);
+  --aplayer-lrc-stroke-color: rgba(255,255,255,0.7);
+}
+.darkmode--activated {
+  --aplayer-bg: rgba(40,40,40,0.88);
+  --aplayer-list-bg: rgba(30,30,30,0.9);
+  --aplayer-primary-text: #e5e7eb;
+  --aplayer-secondary-text: #9ca3af;
+  --aplayer-border-color: rgba(255,255,255,0.08);
+  --aplayer-theme-color: #60a5fa;
+  --aplayer-list-item-hover: rgba(255,255,255,0.05);
+  --aplayer-list-item-active: rgba(96,165,250,0.15);
+  --aplayer-scrollbar-thumb: rgba(255,255,255,0.2);
+  --aplayer-scrollbar-thumb-hover: rgba(255,255,255,0.3);
+  --aplayer-lrc-stroke-color: rgba(0,0,0,0.8);
+}
+/* --- 2. 基础与布局样式 (基本保留您的设置) --- */
+.aplayer {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+}
+.aplayer .aplayer-body {
+  background: var(--aplayer-bg) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1) !important;
+  overflow: hidden !important;
+  transition: width 0.4s ease, height 0.4s ease, border-radius 0.4s ease !important;
+}
+.aplayer.aplayer-withlist:not(.aplayer-narrow) .aplayer-body {
+  border-radius: 0 12px 12px 12px !important;
+}
+.aplayer .aplayer-pic {
+  width: 50px !important;
+  height: 50px !important;
+  margin: 8px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+  transition: transform 0.3s ease !important;
+}
+.aplayer .aplayer-pic:hover {
+  transform: scale(1.05) !important;
+}
+.aplayer.aplayer-narrow .aplayer-body {
+  width: 66px !important;
+  height: 66px !important;
+}
+.aplayer.aplayer-narrow .aplayer-list,
+.aplayer.aplayer-narrow.aplayer-withlist .aplayer-list {
+  display: block !important;
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  max-height: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  transition: opacity 0.2s ease, transform 0.2s ease, max-height 0.2s ease !important;
+}
+.aplayer .aplayer-info {
+  margin-left: 66px !important;
+  padding: 10px 7px 0 0px !important;
+  height: 66px !important;
+  border: none !important;
+}
+.aplayer .aplayer-info .aplayer-music {
+  margin: 0 0 5px 2px !important;
+}
+.aplayer .aplayer-info .aplayer-music .aplayer-title {
+  color: var(--aplayer-primary-text) !important;
+  font-size: 15px !important; /* 增大标题字体 */
+  font-weight: 600 !important; /* 增加字体粗细 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+  line-height: 1.3 !important;
+}
+.aplayer .aplayer-info .aplayer-music .aplayer-author,
+.aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  color: var(--aplayer-secondary-text) !important;
+  font-size: 12px !important; /* 增大作者名字体 */
+  font-weight: 500 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100% !important;
+  background: linear-gradient(90deg, var(--aplayer-theme-color), rgba(59,130,246,0.8)) !important;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(125,125,125,0.2) !important;
+  height: 100% !important;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon path {
+  fill: var(--aplayer-secondary-text) !important;
+  transition: fill 0.2s ease;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover path {
+  fill: var(--aplayer-theme-color) !important;
+}
+.aplayer .aplayer-pic .aplayer-button {
+  background: rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(2px) !important;
+  -webkit-backdrop-filter: blur(2px) !important;
+}
+.aplayer .aplayer-pic .aplayer-button svg,
+.aplayer .aplayer-pic .aplayer-button svg path {
+  fill: #fff !important;
+}
+.aplayer-volume {
+  background-color: rgba(59,130,246,0.8) !important;
+}
+/* --- 3. 播放列表样式 --- */
+.aplayer .aplayer-list {
+  position: absolute !important;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  margin-bottom: 8px;
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.3s ease !important;
+}
+.aplayer.aplayer-withlist .aplayer-list {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  max-height: 260px !important;
+  pointer-events: auto !important;
+}
+.aplayer .aplayer-list ol {
+  background: var(--aplayer-list-bg) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1) !important;
+  border-radius: 12px 12px 0 0 !important;
+  list-style-type: none;
+  margin: 0;
+  padding: 8px 0 !important;
+  height: 250px;
+  overflow-y: auto;
+  box-sizing: border-box !important;
+  transition: none !important;
+}
+.aplayer .aplayer-list ol li {
+  position: relative;
+  color: var(--aplayer-primary-text) !important;
+  border-top: 1px solid var(--aplayer-border-color) !important;
+  height: 34px;
+  line-height: 34px;
+  padding: 0 15px 0 15px;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+}
+.aplayer .aplayer-list ol li:first-child {
+  border-top: none !important;
+}
+.aplayer .aplayer-list ol li:hover {
+  background: var(--aplayer-list-item-hover) !important;
+}
+.aplayer .aplayer-list ol li.aplayer-list-light {
+  background: var(--aplayer-list-item-active) !important;
+}
+.aplayer .aplayer-list ol li .aplayer-list-author {
+  color: var(--aplayer-secondary-text) !important;
+}
+.aplayer .aplayer-list ol li.aplayer-list-light .aplayer-list-cur {
+  display: block !important;
+  background: var(--aplayer-list-cur-bar) !important;
+  width: 4px;
+  height: 24px;
+  top: 5px;
+  left: 0;
+  border-radius: 0 2px 2px 0;
+}
+.aplayer .aplayer-list ol li .aplayer-list-index {
+  color: var(--aplayer-secondary-text);
+}
+.aplayer .aplayer-list ol::-webkit-scrollbar {
   width: 6px;
 }
-/* 滑块的样式 */
-.simplebar-scrollbar::before {
-/* 使用我们定义的颜色变量 */
-  background: var(--scrollbar-thumb-bg);
-/* 设置圆角 */
+.aplayer .aplayer-list ol::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb {
   border-radius: 3px;
-/* 初始状态完全透明 */
-  opacity: 0;
-/* 关键：为透明度变化添加平滑、自然的过渡效果 */
-  transition: opacity 0.3s ease-out;
-/* 确保滑块在轨道内，而不是从轨道边缘开始 */
+  background-color: var(--aplayer-scrollbar-thumb);
+  transition: background-color 0.2s ease;
+}
+.aplayer .aplayer-list ol::-webkit-scrollbar-thumb:hover {
+  background-color: var(--aplayer-scrollbar-thumb-hover);
+}
+/* === 6. 进度条美化 (已修复) === */
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
+  padding: 6px 0 5px 0 !important;
+  cursor: pointer !important;
+/* 🔥 关键修复：不使用 flex: 1，而是设置具体的宽度和最大宽度 */
+  width: calc(100% - 100px) !important; /* 为右侧按钮预留 100px 空间 */
+  max-width: 200px !important; /* 限制进度条最大宽度 */
+  margin: 0 5px 0 2px !important; /* 减少左右边距 */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  position: relative;
+  height: 4px !important;
+  width: 100%;
+  background: rgba(0,0,0,0.1) !important;
+  border-radius: 2px !important;
+  overflow: visible !important;
+  transition: height 0.2s ease;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played .aplayer-thumb {
+  position: absolute !important;
+  top: -50% !important;
+  right: 0 !important;
+  height: 12px !important;
+  width: 12px !important;
+  border-radius: 50%;
+  cursor: pointer;
+  background: var(--aplayer-theme-color) !important;
+  border: 2px solid #fff !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2) !important;
+  transition: transform 0.2s ease-in-out !important;
+  z-index: 2;
+}
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap:hover .aplayer-played .aplayer-thumb {
+  transform: translate(50%, -50%) scale(1);
+}
+/* 🔥 关键修复：重新设计控制器布局 */
+.aplayer .aplayer-controller {
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  height: 20px;
+  margin-top: 2px;
+/* 确保有足够空间显示所有元素 */
+  min-width: 280px !important;
+}
+/* 🔥 时间显示区域优化 */
+.aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  position: relative;
+  right: 0;
+  bottom: 0 !important;
+  height: auto !important;
+  color: var(--aplayer-secondary-text) !important;
+  font-size: 12px !important; /* 保持合适的字体大小 */
+  font-weight: 500 !important; /* 增加字体粗细 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important; /* 更好的字体 */
+  display: flex !important;
+  align-items: center;
+  white-space: nowrap;
+/* 🔥 关键：为按钮组合预留足够空间 */
+  min-width: 85px !important; /* 调整空间适应较小的按钮 */
+  justify-content: flex-end !important;
+  gap: 3px !important; /* 适中的按钮间距 */
+}
+/* === 7. APlayer Mini Switcher (收缩/展开按钮) 美化 === */
+.aplayer.aplayer-fixed .aplayer-miniswitcher {
+  background: var(--aplayer-bg) !important;
+  top: 0 !important;
+  right: 0 !important;
+  border-radius: 0 12px 12px 0 !important;
+  border-left: 1px solid var(--aplayer-border-color) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.aplayer.aplayer-fixed .aplayer-miniswitcher .aplayer-icon {
+  height: 20px !important;
+  width: 20px !important;
+}
+.aplayer.aplayer-fixed .aplayer-miniswitcher .aplayer-icon path {
+  fill: var(--aplayer-secondary-text) !important;
+}
+.aplayer.aplayer-fixed .aplayer-miniswitcher:hover .aplayer-icon path {
+  fill: var(--aplayer-theme-color) !important;
+}
+/* === 8. 控制按钮修复 === */
+/* 🔥 确保所有控制按钮正确显示 */
+.aplayer .aplayer-controller .aplayer-icon {
+  width: 16px !important; /* 调整到合适大小 */
+  height: 16px !important;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  opacity: 0.8;
+  margin: 0 1.5px !important; /* 适中的按钮间距 */
+  vertical-align: middle;
+  display: inline-block !important;
+  flex-shrink: 0 !important; /* 防止按钮被压缩 */
+  transition: all 0.2s ease !important; /* 添加过渡效果 */
+}
+.aplayer .aplayer-controller .aplayer-icon path {
+  transition: all 0.2s ease-in-out;
+  fill: var(--aplayer-secondary-text) !important;
+}
+.aplayer .aplayer-controller .aplayer-icon:hover path {
+  fill: var(--aplayer-theme-color) !important;
+}
+/* 🔥 特别确保播放顺序和循环模式按钮显示 */
+.aplayer .aplayer-controller .aplayer-icon-order,
+.aplayer .aplayer-controller .aplayer-icon-loop {
+  display: inline-block !important;
+  opacity: 0.8 !important;
+  visibility: visible !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+.aplayer .aplayer-controller .aplayer-icon-order:hover,
+.aplayer .aplayer-controller .aplayer-icon-loop:hover {
+  opacity: 1 !important;
+}
+/* 防止多个 APlayer 实例重叠 */
+.aplayer:not(:last-of-type) {
+  display: none !important;
+}
+/* 隐藏重复的 meting-js 元素 */
+meting-js:not(:last-of-type) {
+  display: none !important;
+}
+/* 确保固定模式下的 APlayer 正确显示 */
+.aplayer.aplayer-fixed {
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
+  margin: 0;
+  z-index: 99;
+  background: transparent !important;
+  border-top: none !important;
+  max-width: none;
 }
-/* 当页面处于滚动状态时，让滑块浮现 */
-.simplebar-scrollable.is-scrolling .simplebar-scrollbar::before {
+.aplayer.aplayer-fixed .aplayer-body {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 400px;
+  z-index: 99;
+}
+/* 🔥 响应式优化：在较小屏幕上进一步优化 */
+@media (max-width: 480px) {
+  .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap {
+    width: calc(100% - 90px) !important; /* 调整为更大按钮留出空间 */
+    max-width: 150px !important;
+  }
+  .aplayer .aplayer-info .aplayer-controller .aplayer-time {
+    min-width: 70px !important;
+    font-size: 11px !important;
+  }
+  .aplayer .aplayer-controller .aplayer-icon {
+    width: 16px !important; /* 在小屏幕上稍微减小但保持清晰 */
+    height: 16px !important;
+    margin: 0 1px !important;
+  }
+}
+/* === 9. 歌词美化 === */
+/* 默认歌词区域可见 */
+.aplayer .aplayer-lrc {
   opacity: 1;
-/* 滚动停止后，延迟一段时间再消失，优化体验 */
-  transition: opacity 0.3s 0.2s ease-out;
+  transform: translateY(0);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: auto;
+  height: 3em !important;
+  overflow: hidden !important;
+  padding: 1em 0 !important;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 20%, #000 80%, transparent 100%);
 }
+/* 当需要“隐藏歌词”时，加这个类 */
+.aplayer .aplayer-lrc.lyric-hidden {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+/* 歌词滚动内容 */
+.aplayer .aplayer-lrc-contents {
+  transition: transform 0.3s ease-out !important;
+  will-change: transform;
+}
+/* 所有歌词行（默认状态） */
+.aplayer .aplayer-lrc-contents p {
+  font-size: 15px !important;
+  font-weight: 600;
+  margin: 0 0 0.4em 0 !important;
+  line-height: 1.8em !important;
+  color: var(--aplayer-primary-text) !important;
+  opacity: 0.3;
+  filter: blur(1px);
+  transform: scale(1);
+  transition: opacity 0.5s ease, filter 0.5s ease, transform 0.5s ease;
+  text-shadow: -1px -1px 0 var(--aplayer-lrc-stroke-color), 1px -1px 0 var(--aplayer-lrc-stroke-color), -1px 1px 0 var(--aplayer-lrc-stroke-color), 1px 1px 0 var(--aplayer-lrc-stroke-color);
+}
+/* 当前播放歌词 */
+.aplayer .aplayer-lrc-contents p.aplayer-lrc-current {
+  font-size: 15px !important;
+  font-weight: 600;
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1.02); /* 微放大，不跳动 */
+}
+/*
+ * ===================================================================
+ * 11. 浏览器滚动条美化 (未完成)
+ * ===================================================================
+
