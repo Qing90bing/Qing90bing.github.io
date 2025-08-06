@@ -71,6 +71,7 @@
 
 <link rel="dns-prefetch" href="https://discussproject.vercel.app/"><!-- APlayer CSS -->
 <link href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" rel="stylesheet">
+
   <noscript>
     <link rel="stylesheet" href="/QingNoteblog/css/noscript.css">
   </noscript>
@@ -148,37 +149,56 @@
    * @description 此模块包含针对页面 DOM 结构和元素层级问题的修复脚本。
    */
 
-  /*
-   * -------------------------------------------------------------------
-   * [DOM 修复] 解决搜索弹窗的层叠上下文问题
-   * -------------------------------------------------------------------
-   *
-   * 问题描述:
-   * Next 主题（或其他类似主题）默认将搜索弹窗的 HTML 结构（通常是 .search-pop-overlay 元素）
-   * 放置在 <header> 元素内部。当 <header> 应用了某些 CSS 属性（如 `backdrop-filter` 或 `overflow: hidden`）时，
-   * 会创建一个新的层叠上下文（Stacking Context）。这导致 `position: fixed` 的搜索弹窗
-   * 被限制在 `<header>` 区域内，无法全屏显示，尤其是在动画或滚动时出现裁剪。
-   *
-   * 解决方案:
-   * 为了从根本上解决层叠上下文的限制问题，此脚本在页面内容完全加载后（DOMContentLoaded 事件），
-   * 会查找 `.search-pop-overlay` 搜索弹窗元素，并将其从 `<header>` 内部移动到 `<body>` 的
-   * 直接子元素层级。这样，搜索弹窗就不再受限于父元素的层叠上下文，能够正确地全屏显示，
-   * 并且避免了使用复杂的 CSS 补丁来处理动画时序问题。
-   */
-  document.addEventListener('DOMContentLoaded', () => {
-    // 查找页面中的搜索弹窗元素
-    const searchPopup = document.querySelector('.search-pop-overlay');
-    // 获取页面的 body 元素
-    const body = document.body;
+  (() => {
+    let hasFixed = false;
 
-    // 确保搜索弹窗和 body 元素都存在
-    if (searchPopup && body) {
-      // 将搜索弹窗元素移动到 body 的末尾，使其脱离原有的层叠上下文限制
-      body.appendChild(searchPopup);
+    /*
+     * -------------------------------------------------------------------
+     * [DOM 修复] 解决搜索弹窗的层叠上下文问题
+     * -------------------------------------------------------------------
+     *
+     * 问题描述:
+     * Next 主题默认将搜索弹窗的 HTML 结构（.search-pop-overlay 元素）
+     * 放置在 <header> 元素内部。当 <header> 应用了某些 CSS 属性时，
+     * 会创建新的层叠上下文，导致 position: fixed 的搜索弹窗
+     * 被限制在 <header> 区域内，无法全屏显示。
+     *
+     * 解决方案:
+     * 将搜索弹窗从 <header> 内部移动到 <body> 的直接子元素层级。
+     */
+    function fixSearchPopup() {
+      if (hasFixed) return;
+
+      const searchPopup = document.querySelector('.search-pop-overlay');
+      const body = document.body;
+
+      if (searchPopup && body && searchPopup.parentElement !== body) {
+        // 使用 RAF 确保在渲染周期的合适时机移动元素
+        requestAnimationFrame(() => {
+          body.appendChild(searchPopup);
+          hasFixed = true;
+          console.log('Search popup moved to body');
+        });
+      }
     }
-  });
-</script>
 
+    // 使用节流的事件监听
+    let timeoutId = null;
+    function throttledFix() {
+      if (timeoutId) return;
+      timeoutId = setTimeout(() => {
+        fixSearchPopup();
+        timeoutId = null;
+      }, 100);
+    }
+
+    document.addEventListener('DOMContentLoaded', throttledFix);
+    document.addEventListener('pjax:success', () => {
+      hasFixed = false;
+      throttledFix();
+    });
+  })();
+</script>
 </header>
         
   
@@ -325,57 +345,91 @@
     <span id="times">载入时分秒...</span>
 
     <script>
-        /**
-         * @function createtime
-         * @description 计算并实时更新网站的已运行时间。
-         * 该函数每500毫秒执行一次，精确显示网站从指定启动时间至今的天、时、分、秒。
-         */
-        function createtime() {
-            // 定义网站的启动时间，格式为 'MM/DD/YYYY HH:MM:SS'
+        // 性能优化：使用节流和 RAF 优化时间更新
+        (() => {
+            const timeDateElement = document.getElementById("timeDate");
+            const timesElement = document.getElementById("times");
             const startTime = '07/29/2025 18:12:55';
-            const start = new Date(startTime); // 将启动时间字符串转换为 Date 对象
+            const start = new Date(startTime);
+            
+            let lastUpdate = 0;
+            let rafId = null;
 
-            // 计算当前时间与启动时间之间的时间差（毫秒）
-            let mill = new Date() - start;
-            // 将毫秒转换为秒
-            let seconds = Math.floor(mill / 1000);
-            // 将秒转换为分钟
-            let mins = Math.floor(seconds / 60);
-            // 将分钟转换为小时
-            let hours = Math.floor(mins / 60);
-            // 将小时转换为天数
-            let days = Math.floor(hours / 24);
+            /**
+             * @function createtime
+             * @description 计算并实时更新网站的已运行时间
+             * 使用 RAF 和节流优化，减少强制重排
+             */
+            function createtime(timestamp) {
+                // 节流：确保至少间隔 1000ms 才更新
+                if (timestamp - lastUpdate < 1000) {
+                    rafId = requestAnimationFrame(createtime);
+                    return;
+                }
 
-            // 计算剩余的秒、分钟和小时
-            const time = {
-                seconds: seconds - mins * 60,  // 当前分钟内的秒数
-                mins: mins - hours * 60,      // 当前小时内的分钟数
-                hours: hours - days * 24,     // 当前天数内的小时数
-            };
+                // 确保元素存在
+                if (!timeDateElement || !timesElement) {
+                    return;
+                }
 
-            // 格式化时间，确保所有单位（秒、分、时）都至少是两位数（例如：5秒显示为05）
-            for (const k in time) {
-                time[k] = `${time[k]}`.padStart(2, '0');
+                const mill = new Date() - start;
+                const seconds = Math.floor(mill / 1000);
+                const mins = Math.floor(seconds / 60);
+                const hours = Math.floor(mins / 60);
+                const days = Math.floor(hours / 24);
+
+                const remainingHours = (hours - days * 24).toString().padStart(2, '0');
+                const remainingMins = (mins - hours * 60).toString().padStart(2, '0');
+                const remainingSeconds = (seconds - mins * 60).toString().padStart(2, '0');
+
+                // 只有内容发生变化时才更新 DOM
+                const newDateText = ` ${days} 天`;
+                const newTimeText = ` ${remainingHours} 小时 ${remainingMins} 分 ${remainingSeconds} 秒`;
+
+                if (timeDateElement.textContent !== newDateText) {
+                    timeDateElement.textContent = newDateText;
+                }
+                if (timesElement.textContent !== newTimeText) {
+                    timesElement.textContent = newTimeText;
+                }
+
+                lastUpdate = timestamp;
+                rafId = requestAnimationFrame(createtime);
             }
 
-            // 更新显示天数的元素
-            document.getElementById("timeDate").innerHTML = ` ${days} 天`;
-            // 更新显示小时、分钟、秒的元素
-            document.getElementById("times").innerHTML = ` ${time.hours} 小时 ${time.mins} 分 ${time.seconds} 秒`;
-        }
+            // 启动动画循环
+            function startTimer() {
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                }
+                rafId = requestAnimationFrame(createtime);
+            }
 
-        // 每500毫秒调用一次 createtime 函数，实现时间实时更新
-        setInterval(createtime, 500);
+            // 停止动画循环
+            function stopTimer() {
+                if (rafId) {
+                    cancelAnimationFrame(rafId);
+                    rafId = null;
+                }
+            }
+
+            // 页面可见性API优化：页面不可见时停止更新
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    stopTimer();
+                } else {
+                    startTimer();
+                }
+            });
+
+            // 首次启动
+            startTimer();
+
+            // 页面卸载时清理
+            window.addEventListener('beforeunload', stopTimer);
+        })();
     </script>
 </div>
-
-<!--
-    如果您需要启用背景粒子动画效果，可以取消注释下方 <script> 标签。
-    该脚本引入了 canvas-nest.js 库，用于在页面上生成动态的线条连接粒子效果。
-    目前此功能处于禁用状态，以优化页面加载性能或满足特定设计需求。
--->
-<!-- <script color="0,0,0" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script> -->
-
 
     </div>
   </footer>
@@ -431,26 +485,90 @@ darkmode.showWidget();
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting/dist/Meting.min.js"></script>
 
-<!-- APlayer 持久化初始化脚本 -->
+<!-- MetingJS 播放器  -->
+<meting-js
+    server="netease"
+    type="playlist"
+    id="2692072963"
+    fixed="true"
+    autoplay="false"
+    order="list"
+    volume="0.55"
+    theme="#518AE7"
+    preload="auto">
+</meting-js>
+
+<!-- ✨ 动画控制脚本  -->
 <script>
-  function initAPlayer() {
-    if (document.querySelector('.aplayer')) {
-      return;
-    }
-    const metingElement = document.createElement('meting-js');
-    metingElement.setAttribute('id', '2692072963');
-    metingElement.setAttribute('server', 'netease');
-    metingElement.setAttribute('type', 'playlist');
-    metingElement.setAttribute('fixed', 'true');
-    metingElement.setAttribute('autoplay', 'false');
-    metingElement.setAttribute('order', 'list');
-    metingElement.setAttribute('volume', '0.55');
-    metingElement.setAttribute('theme', '#518AE7');
-    metingElement.setAttribute('preload', 'auto');
-    document.body.appendChild(metingElement);
-  }
-  document.addEventListener('DOMContentLoaded', () => setTimeout(initAPlayer, 300));
-  document.addEventListener('pjax:success', () => setTimeout(initAPlayer, 300));
+// APlayer 封面切换动画的智能控制脚本
+// 原理：监听歌曲切换事件，预加载新封面图片，
+// 待图片加载完毕后，才触发旧封面的淡出动画，从而消除闪烁。
+document.addEventListener('DOMContentLoaded', function () {
+    const initAPlayer = () => {
+        // 使用 MutationObserver 来可靠地等待 MetingJS 初始化 APlayer
+        const observer = new MutationObserver((mutations, obs) => {
+            const metingEle = document.querySelector('meting-js');
+            if (metingEle && metingEle.aplayer) {
+                // 成功找到 APlayer 实例，开始设置动画并停止观察
+                setupAnimation(metingEle.aplayer);
+                obs.disconnect(); 
+            }
+        });
+
+        // 开始观察 body 的变化
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // 设置一个超时，以防万一 APlayer 未能加载
+        setTimeout(() => observer.disconnect(), 10000);
+    };
+
+    const setupAnimation = (ap) => {
+        const picEle = ap.container.querySelector('.aplayer-pic');
+        if (!picEle) return;
+
+        // 初始化时，将当前封面作为第一张“旧”封面
+        let oldPicUrl = window.getComputedStyle(picEle).backgroundImage;
+
+        // 监听 APlayer 的 'listswitch' 事件，这是最准确的歌曲切换事件
+        ap.on('listswitch', (data) => {
+            // 从 APlayer 的播放列表中获取新歌曲的信息
+            const newAudio = ap.list.audios[data.index];
+            if (!newAudio || !newAudio.cover) return;
+            
+            const newPicUrl = newAudio.cover;
+
+            // 1. 将捕获到的旧封面URL应用到伪元素，并添加 'is-crossfading' 类
+            //    这会使伪元素（旧封面）立即出现，覆盖住正在加载的新封面，防止闪烁
+            picEle.style.setProperty('--aplayer-old-pic', oldPicUrl);
+            picEle.classList.add('is-crossfading');
+
+            // 2. 创建一个新的 Image 对象来预加载新封面
+            const newImg = new Image();
+            newImg.src = newPicUrl;
+
+            // 3. 当且仅当新图片确认加载完成后，执行以下操作
+            newImg.onload = () => {
+                // APlayer 内部已经将新封面URL设置给了 .aplayer-pic 的 background-image
+                // 我们现在只需要移除 'is-crossfading' 类，CSS就会自动处理旧封面的淡出动画
+                picEle.classList.remove('is-crossfading');
+                // 4. 更新 oldPicUrl，为下一次切歌做准备
+                oldPicUrl = `url("${newPicUrl}")`;
+            };
+            
+            // 容错处理：如果新图片加载失败，也直接移除遮罩层，避免卡住
+            newImg.onerror = () => {
+                picEle.classList.remove('is-crossfading');
+                oldPicUrl = `url("${newPicUrl}")`; // 即使失败也更新，防止下次使用错误的旧图
+            };
+        });
+    };
+
+    // 启动初始化进程
+    initAPlayer();
+});
 </script>
 
 </body>
