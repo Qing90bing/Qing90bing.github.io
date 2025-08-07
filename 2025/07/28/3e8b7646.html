@@ -75,7 +75,6 @@
 
 <link rel="dns-prefetch" href="https://discussproject.vercel.app/"><!-- APlayer CSS -->
 <link href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" rel="stylesheet">
-
   <noscript>
     <link rel="stylesheet" href="/QingNoteblog/css/noscript.css">
   </noscript>
@@ -614,6 +613,28 @@ darkmode.showWidget();
     preload="auto">
 </meting-js>
 
+<!-- ✨ 模拟一次点击关闭歌词，让用户自己打开歌词 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver(function (mutations, obs) {
+    const lrcBtn = document.querySelector('.aplayer-icon-lrc');
+
+    // 当按钮出现后，模拟一次点击关闭歌词（仅当默认是打开状态）
+    if (lrcBtn && !lrcBtn.classList.contains('aplayer-icon-lrc-inactivity')) {
+      lrcBtn.click();  // 关闭歌词
+      obs.disconnect(); // 停止观察
+    }
+  });
+
+  // 观察整个 body，看什么时候歌词按钮出现
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+});
+</script>
+
+
 <!-- ✨ 动画控制脚本  -->
 <script>
 // APlayer 封面切换动画的智能控制脚本
@@ -684,6 +705,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 启动初始化进程
     initAPlayer();
+});
+</script>
+
+<!-- ✨ 检测用户是否是移动端，如果是，则移除Aplayer  -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (isMobile) {
+    const player = document.querySelector('meting-js');
+    if (player) {
+      player.remove(); // 或者 player.style.display = 'none';
+    }
+  }
 });
 </script>
 

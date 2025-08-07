@@ -76,7 +76,6 @@
 
 <link rel="dns-prefetch" href="https://discussproject.vercel.app/"><!-- APlayer CSS -->
 <link href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" rel="stylesheet">
-
   <noscript>
     <link rel="stylesheet" href="/QingNoteblog/css/noscript.css">
   </noscript>
@@ -295,7 +294,7 @@
 <p>您好，欢迎来到清志小栈。</p>
 <p>这里是一个记录生活、分享想法的地方，有时写写文字，有时聊聊技术，也偶尔发些照片。<br>我希望它保持简单、温暖，也能给你带来一些轻松与启发。</p>
 <p>这个空间记录生活的片段，也分享一些技术、阅读与思考的痕迹。希望在这里，你能找到一点温柔，也能带走一丝共鸣。</p>
-<p>如果有想说的话，可以在下方留言；也可以发送邮件至：<strong><a href="mailto:&#x31;&#56;&#55;&#x39;&#52;&#x39;&#x35;&#53;&#x31;&#x39;&#x40;&#113;&#113;&#x2e;&#99;&#x6f;&#x6d;">1879495519@qq.com</a></strong> 与我取得联系。</p>
+<p>如果有想说的话，可以在下方留言；也可以发送邮件至：<strong><a href="mailto:&#49;&#x38;&#55;&#x39;&#x34;&#x39;&#53;&#53;&#x31;&#x39;&#64;&#x71;&#113;&#x2e;&#x63;&#111;&#x6d;">1879495519@qq.com</a></strong> 与我取得联系。</p>
 <p>感谢你的到访 🍃</p>
 
       </div>
@@ -498,6 +497,28 @@ darkmode.showWidget();
     preload="auto">
 </meting-js>
 
+<!-- ✨ 模拟一次点击关闭歌词，让用户自己打开歌词 -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const observer = new MutationObserver(function (mutations, obs) {
+    const lrcBtn = document.querySelector('.aplayer-icon-lrc');
+
+    // 当按钮出现后，模拟一次点击关闭歌词（仅当默认是打开状态）
+    if (lrcBtn && !lrcBtn.classList.contains('aplayer-icon-lrc-inactivity')) {
+      lrcBtn.click();  // 关闭歌词
+      obs.disconnect(); // 停止观察
+    }
+  });
+
+  // 观察整个 body，看什么时候歌词按钮出现
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+});
+</script>
+
+
 <!-- ✨ 动画控制脚本  -->
 <script>
 // APlayer 封面切换动画的智能控制脚本
@@ -568,6 +589,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 启动初始化进程
     initAPlayer();
+});
+</script>
+
+<!-- ✨ 检测用户是否是移动端，如果是，则移除Aplayer  -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (isMobile) {
+    const player = document.querySelector('meting-js');
+    if (player) {
+      player.remove(); // 或者 player.style.display = 'none';
+    }
+  }
 });
 </script>
 
