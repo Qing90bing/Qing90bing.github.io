@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #fff;
+    background: #6cafff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3063,9 +3063,24 @@ main.main {
 .post-header {
   margin-bottom: 0px !important; /* 移除文章头部的默认下边距，以实现更紧凑的布局或与其他元素的精确对齐。 */
 }
-/* 文章正文图片 (.post-body img) 圆角 */
+/* 文章图片 (.post-body img) */
 .post-body img {
-  border-radius: var(--custom-border-radius-small) !important; /* 对文章正文中的所有图片应用自定义的小圆角，保持视觉一致性。 */
+  border-radius: var(--custom-border-radius-small) !important;
+  display: block;
+  max-width: 100%;
+/* 关键改动：
+   * 移除了固定的 aspect-ratio，并保留 height: auto。
+   * 这样浏览器会根据图片自身的宽高比来显示，解决了“有时大有时小”的问题。
+   * 为了防止页面抖动，你需要确保 Hexo 生成的 <img> 标签包含 width 和 height 属性。
+   */
+  height: auto;
+  margin: 1.5em auto;
+/* 继续保留占位背景色，提升加载体验 */
+  background-color: #f0f0f0;
+}
+/* 当图片成功加载后，移除占位背景色 */
+.post-body img[src]:not([src=""]) {
+  background-color: transparent;
 }
 /* 站点作者头像 (.site-author-image) 样式 */
 .site-author-image {
@@ -3965,6 +3980,29 @@ meting-js:not(:last-of-type) {
     display: none !important;
   }
 }
+/*  ✨ 优雅的入场动画 ✨  */
+/* 定义优雅加载动画 */
+/* 定义一个“备用”动画，防止JS脚本失效导致播放器永久隐藏 */
+/* 播放器的初始状态：
+ * 1. 默认透明，准备执行动画。
+ * 2. 设置一个2秒后触发的“备用”动画。如果JS成功运行，这个动画会被覆盖。
+ */
+.aplayer.aplayer-fixed {
+  opacity: 0;
+  pointer-events: none;
+/* 这是一个安全网：如果JS脚本在2秒内没有成功添加 .aplayer-ready 类，
+     播放器也会强制显示出来，避免完全消失的问题。动画时长很短，效果是瞬间显示。 */
+  animation: aplayer-failsafe-show 0.1s linear 0s forwards;
+}
+/* 动画触发类：
+ * 当JS成功检测到播放器并添加这个类后，它会覆盖上面的“备用”动画，
+ * 并立即执行我们期望的优雅淡入动画。
+ */
+.aplayer.aplayer-fixed.aplayer-ready {
+  pointer-events: auto;
+/* 应用优雅加载动画，这将覆盖 aplayer-failsafe-show */
+  animation: aplayer-fade-in 1s ease-out forwards;
+}
 /* === 10. 滚动条美化（简化版） === */
 /* -- 日间模式滚动条颜色 -- */
 :root {
@@ -4001,14 +4039,83 @@ meting-js:not(:last-of-type) {
 }
 /*
  * ===================================================================
- * 11. 移动端体验强化
+ * 11. 代码块美化
  * ===================================================================
  */
+/* 代码块整体圆角 */
+figure.highlight {
+  border-radius: 8px;
+  overflow: hidden /* 确保圆角生效时内容不会溢出 */;
+  border: 1px solid rgba(0,0,0,0.08) /* 可选，增加边框层次感 */;
+}
+/* 代码块顶部语言标签样式 */
+figure.highlight::before {
+  font-family: "Fira Code", "JetBrains Mono", monospace /* 你喜欢的等宽字体 */;
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background: rgba(0,0,0,0.05) /* 语言标签背景 */;
+  color: #ff6f61 /* 标签文字颜色，可换 */;
+  padding: 3px 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+/* 美化 code-lang 标签字体 */
+.code-lang {
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  font-weight: 600 /* 半粗，增强可读性 */;
+  letter-spacing: 0.3px;
+  text-transform: uppercase /* 全部大写更有标签感，可去掉 */;
+}
+/* ===== 代码块复制按钮（纸质风 + 动画） ===== */
+/* 代码块容器确保可以定位 */
+figure.highlight {
+  position: relative;
+}
+/* 按钮初始样式 */
+.copy-btn {
+  background: #f3f3f3;
+  color: #5a4634;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  padding: 4px 8px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  transition: all 0.3s ease /* 所有变化丝滑过渡 */;
+}
+.copy-btn:hover {
+  background: #e9e9e9;
+  color: #4a3b2b;
+  border-color: #d6d6d6;
+}
+/* 鼠标移入代码块时，按钮淡入滑入 */
+figure.highlight:hover .highlight-copy-btn {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 @keyframes aplayer-loading-spin {
   from {
     transform: translate(-50%, -50%) rotate(0deg);
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes aplayer-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes aplayer-failsafe-show {
+  to {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
