@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #5065fb;
+    background: #57ffdf;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3157,7 +3157,7 @@ main.main {
   box-sizing: border-box !important; /* 确保盒子模型一致，边框和内边距包含在尺寸内。 */
   background: #fff !important; /* 统一为不透明白色背景。 */
   -webkit-backdrop-filter: none !important; /* 移除 Webkit 模糊效果。 */
-  backdrop-filter: none !important; /* 移除标准模糊效果。 */
+  backdrop-filter: none !important; /* 移除标准背景模糊效果。 */
   border: 1px solid rgba(0,0,0,0.08) !important; /* 统一浅色边框。 */
   box-shadow: 0 2px 10px rgba(0,0,0,0.12) !important; /* 统一阴影效果。 */
   transition: all 0.3s ease; /* 定义所有属性的平滑过渡动画。 */
@@ -3181,8 +3181,8 @@ main.main {
  */
 /* Waline 评论区容器 (#waline) 内边距和上边距 */
 #waline {
-  padding: 25px; /* 设置评论区容器的内边距。 */
-  margin-top: 20px; /* 设置评论区容器的上边距，与上方内容分隔。 */
+  padding: 22px; /* 设置评论区容器的内边距。 */
+  margin-top: 12px; /* 设置评论区容器的上边距，与上方内容分隔。 */
 }
 /* Waline 面板和卡片背景与边框清理 */
 /* 移除 Waline 内部默认的背景、边框和阴影，以便应用统一的毛玻璃效果。 */
@@ -3305,6 +3305,7 @@ main.main {
 /* 6.5. Waline 评论区精细化颜色调整 (夜间模式)
      * 针对 Waline 评论区在暗黑模式下的各个元素进行详细的颜色适配。
      */
+/* ✨ [新增] 夜间模式下 APlayer 展开/收起按钮样式 */
 }
 .darkmode--activated .header,
 .darkmode--activated .sidebar-inner,
@@ -3371,6 +3372,12 @@ main.main {
 }
 .darkmode--activated #waline .wl-btn.primary:hover {
   background: #3b82f6 !important; /* 主要按钮悬停背景色。 */
+}
+.darkmode--activated .aplayer.aplayer-fixed .aplayer-miniswitcher {
+  background: rgba(40,40,40,0.6) !important; /* 夜间模式：更透明的深色背景 */
+}
+.darkmode--activated .aplayer.aplayer-fixed .aplayer-miniswitcher:hover {
+  background: rgba(40,40,40,0.8) !important;
 }
 /*
  * -------------------------------------------------------------------
@@ -3442,14 +3449,48 @@ main.main {
   overflow: visible !important;
   margin: 0 !important;
 }
+/*
+ * ===================================================================
+ * ✨ APlayer 播放器入场动画 (最终修复版)
+ * ===================================================================
+ */
+/* 1. 定义背景“揭开”动画 */
+/* 2. 定义内容“淡入”动画 */
+/* 3. 将 aplayer-body 设为透明的定位容器 */
 .aplayer .aplayer-body {
+  background: transparent !important;
+  position: relative;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1) !important;
+  overflow: hidden !important; /* 必须保留，以确保圆角效果 */
+  transition: width 0.4s ease, height 0.4s ease, border-radius 0.4s ease !important;
+}
+/* 4. 使用伪元素 ::before 创建独立的、带动画的毛玻璃背景层 */
+.aplayer .aplayer-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0; /* 将背景层置于内容之下 */
+/* 应用背景色和模糊效果 */
   background: var(--aplayer-bg) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.1) !important;
-  overflow: hidden !important;
-  transition: width 0.4s ease, height 0.4s ease, border-radius 0.4s ease !important;
+  border-radius: inherit; /* 继承父元素的圆角 */
+/* 应用“揭开”动画 */
+  animation: aplayer-reveal-up 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+  animation-fill-mode: both; /* 动画前后保持状态 */
+}
+/* 5. 为播放器内部的实际内容（封面和信息）应用“淡入”动画 */
+.aplayer .aplayer-info,
+.aplayer .aplayer-pic {
+  position: relative; /* 确保 z-index 生效 */
+  z-index: 1; /* 置于 ::before 背景层之上 */
+/* 应用“淡入”动画，并稍作延迟，等待背景动画开始 */
+  animation: aplayer-fade-in 0.4s ease-out 0.7s; /* 延迟0.7秒，在背景揭开后再淡入 */
+  animation-fill-mode: both;
 }
 .aplayer.aplayer-withlist:not(.aplayer-narrow) .aplayer-body {
   border-radius: 0 12px 12px 12px !important;
@@ -3707,19 +3748,29 @@ main.main {
 /* 你可以根据喜好调整对齐方式 */
   text-align: left;
 }
-/* === 7. APlayer Mini Switcher (收缩/展开按钮) 美化 === */
+/* * ===================================================================
+ * ✨ 7. APlayer Mini Switcher (收缩/展开按钮) 美化 - 更新版
+ * ===================================================================
+ */
 .aplayer.aplayer-fixed .aplayer-miniswitcher {
-  background: var(--aplayer-bg) !important;
+/* 使用更透明的背景以强化毛玻璃效果 */
+  background: rgba(255,255,255,0.6) !important; /* 日间模式：半透明白色背景 */
   top: 0 !important;
   right: 0 !important;
   border-radius: 0 12px 12px 0 !important;
   border-left: 1px solid var(--aplayer-border-color) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
+/* 应用背景模糊效果 */
+  backdrop-filter: blur(10px) !important; /* 增强模糊度 */
+  -webkit-backdrop-filter: blur(10px) !important;
   display: flex !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* 添加背景色过渡动画，提升交互体验 */
+}
+/* 鼠标悬停时稍微降低透明度，提供视觉反馈 */
+.aplayer.aplayer-fixed .aplayer-miniswitcher:hover {
+  background: rgba(255,255,255,0.8) !important;
 }
 .aplayer.aplayer-fixed .aplayer-miniswitcher .aplayer-icon {
   height: 20px !important;
@@ -3981,34 +4032,7 @@ meting-js:not(:last-of-type) {
     display: none !important;
   }
 }
-/*
- * ===================================================================
- * APlayer 优雅加载动画 (已增强稳定性)
- * ===================================================================
- */
-/* 定义优雅加载动画 */
-/* 定义一个“备用”动画，防止JS脚本失效导致播放器永久隐藏 */
-/* 播放器的初始状态：
- * 1. 默认透明，准备执行动画。
- * 2. 设置一个2秒后触发的“备用”动画。如果JS成功运行，这个动画会被覆盖。
- */
-.aplayer.aplayer-fixed {
-  opacity: 0;
-  pointer-events: none;
-/* 这是一个安全网：如果JS脚本在2秒内没有成功添加 .aplayer-ready 类，
-     播放器也会强制显示出来，避免完全消失的问题。动画时长很短，效果是瞬间显示。 */
-  animation: aplayer-failsafe-show 0.1s linear 0s forwards;
-}
-/* 动画触发类：
- * 当JS成功检测到播放器并添加这个类后，它会覆盖上面的“备用”动画，
- * 并立即执行我们期望的优雅淡入动画。
- */
-.aplayer.aplayer-fixed.aplayer-ready {
-  pointer-events: auto;
-/* 应用优雅加载动画，这将覆盖 aplayer-failsafe-show */
-  animation: aplayer-fade-in 1s ease-out forwards;
-}
-/* === 10. 滚动条美化（简化版） === */
+/* === 11. 滚动条美化（简化版） === */
 /* -- 日间模式滚动条颜色 -- */
 :root {
   --scrollbar-track-color: #f1f1f1;
@@ -4046,16 +4070,16 @@ meting-js:not(:last-of-type) {
 /* 代码块整体圆角 */
 figure.highlight {
   border-radius: 8px;
-  overflow: hidden /* 确保圆角生效时内容不会溢出 */;
-  border: 1px solid rgba(0,0,0,0.08) /* 可选，增加边框层次感 */;
+  overflow: hidden; /* 确保圆角生效时内容不会溢出 */
+  border: 1px solid rgba(0,0,0,0.08); /* 可选，增加边框层次感 */
 }
 /* 代码块顶部语言标签样式 */
 figure.highlight::before {
-  font-family: "Fira Code", "JetBrains Mono", monospace /* 你喜欢的等宽字体 */;
+  font-family: "Fira Code", "JetBrains Mono", monospace; /* 你喜欢的等宽字体 */
   font-weight: bold;
   letter-spacing: 0.5px;
-  background: rgba(0,0,0,0.05) /* 语言标签背景 */;
-  color: #ff6f61 /* 标签文字颜色，可换 */;
+  background: rgba(0,0,0,0.05); /* 语言标签背景 */
+  color: #ff6f61; /* 标签文字颜色，可换 */
   padding: 3px 8px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -4063,9 +4087,141 @@ figure.highlight::before {
 /* 美化 code-lang 标签字体 */
 .code-lang {
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
-  font-weight: 600 /* 半粗，增强可读性 */;
+  font-weight: 600; /* 半粗，增强可读性 */
   letter-spacing: 0.3px;
-  text-transform: uppercase /* 全部大写更有标签感，可去掉 */;
+  text-transform: uppercase; /* 全部大写更有标签感，可去掉 */
+}
+/*
+ * ===================================================================
+ * ✨ 12. 搜索界面美化
+ * ===================================================================
+ * 为 Next 主题的搜索弹窗添加毛玻璃效果、入场/退场动画，
+ * 并适配暗黑模式，与网站整体风格保持一致，同时提升可读性。
+ */
+/* 1. 搜索遮罩层：提供模糊背景 */
+.search-pop-overlay {
+  background: rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1050;
+/* 默认隐藏 */
+  opacity: 0;
+  pointer-events: none;
+}
+.search-active .search-pop-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* 2. 搜索弹窗主体：毛玻璃效果与入场动画 */
+.popup.search-popup {
+  background: rgba(255,255,255,0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: var(--custom-border-radius, 12px) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+/* ✨ [关键修复] 新增此行，裁剪溢出的子元素（如滚动条） */
+  overflow: hidden !important;
+/* 动画设置 */
+  transform: scale(0.95) translateY(-20px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.search-active .popup.search-popup {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+/* 3. 搜索头部 */
+.search-popup .search-header {
+  background: transparent !important;
+}
+/* 4. 搜索输入框 */
+.search-popup .search-input {
+  background: transparent !important;
+  border: none !important;
+  color: #333 !important;
+  transition: all 0.3s ease;
+}
+.search-popup .search-input::placeholder {
+  color: #999 !important;
+}
+/* 5. 关闭按钮 */
+.search-popup .popup-btn-close {
+  color: #888 !important;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.search-popup .popup-btn-close:hover {
+  color: #333 !important;
+}
+/*
+ * -------------------------------------------------------------------
+ *  12.1. 搜索界面暗黑模式适配
+ * -------------------------------------------------------------------
+ */
+.darkmode--activated .popup.search-popup {
+  background: rgba(40,40,40,0.85) !important;
+}
+.darkmode--activated .search-popup .search-header {
+  border-bottom-color: rgba(255,255,255,0.1) !important;
+}
+.darkmode--activated .search-popup .search-input {
+  color: #e5e7eb !important;
+}
+.darkmode--activated .search-popup .search-input::placeholder {
+  color: #888 !important;
+}
+.darkmode--activated .search-popup .popup-btn-close {
+  transition: background-color 0.2s ease !important;
+}
+.darkmode--activated .search-popup .popup-btn-close i {
+/* 直接控制图标的颜色 */
+  color: #aaa !important;
+  transition: color 0.2s ease !important;
+}
+.darkmode--activated .search-popup .popup-btn-close:hover i {
+/* 悬停时，图标颜色变为最亮的白色 */
+  color: #fff !important;
+}
+.darkmode--activated .search-popup .search-result-container {
+  color: #ccc;
+}
+.darkmode--activated .search-popup .search-result-container .search-stats {
+  border-bottom-color: rgba(255,255,255,0.1);
+}
+.darkmode--activated .search-popup .local-search-hit-item:hover {
+  background-color: rgba(255,255,255,0.08);
+}
+.darkmode--activated .search-popup .local-search-hit-item .local-search-hit-title {
+  color: #60a5fa; /* 暗黑模式下的主题色 */
+}
+.darkmode--activated .search-popup .local-search-hit-item .local-search-hit-path {
+  color: #bbb;
+}
+.darkmode--activated .search-popup .fa-spinner {
+  color: #ccc;
+}
+@keyframes aplayer-reveal-up {
+  from {
+/* 从一个完全被裁剪掉的状态开始 */
+    clip-path: inset(100% 0 0 0);
+  }
+  to {
+/* 动画结束时，完全不裁剪 */
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes aplayer-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 @keyframes aplayer-loading-spin {
   from {
@@ -4073,21 +4229,5 @@ figure.highlight::before {
   }
   to {
     transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-@keyframes aplayer-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes aplayer-failsafe-show {
-  to {
-    opacity: 1;
-    pointer-events: auto;
   }
 }

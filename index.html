@@ -349,13 +349,6 @@
 <p>第一步，我们前往 WakeUp 官方提供的适配器仓库 <a target="_blank" rel="noopener" href="https://github.com/YZune/CourseAdapter">YZune&#x2F;CourseAdapter</a>，了解适配的基本原理和结构。</p>
 <h2 id="适配器代码分析"><a href="#适配器代码分析" class="headerlink" title="适配器代码分析"></a>适配器代码分析</h2><p>适配器的核心是解析教务系统网页的 HTML 源码，提取出课程信息，并将其转换为 WakeUp App 所要求的标准格式。下面我将以我为武汉船舶职业技术学院（基于学校的金智教务系统）编写的适配器为例。</p>
 <h3 id="1-核心解析器：WISTParser-kt"><a href="#1-核心解析器：WISTParser-kt" class="headerlink" title="1. 核心解析器：WISTParser.kt"></a>1. 核心解析器：<code>WISTParser.kt</code></h3><p>这个文件是整个适配器的灵魂，它负责从原始的 HTML 文本中提取、清洗和组织课程数据。</p>
-<h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><p>在开始分析代码前，先看一下这个解析器实现了哪些功能：</p>
-<ul>
-<li><strong>自动清洗周次</strong>：支持 “单周”、”双周”、”X-X周” 等复杂格式。</li>
-<li><strong>智能合并课程</strong>：将同一门课程在不同时间点的记录合并。</li>
-<li><strong>合并连续节次</strong>：自动将 3-4 节这样的连续课程合并为一个条目。</li>
-<li><strong>结构化数据输出</strong>：生成标准的课程列表，包含所有必要信息。</li>
-</ul>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/QingNoteblog/2025/07/31/a3975d2b.html#more" rel="contents">
@@ -478,9 +471,6 @@
 <blockquote>
 <p>金钱、国家、法律、宗教……所有这些我们赖以生存的秩序，本质上都只存在于我们的共同想象之中。一张绿色的纸（钞票）本身毫无价值，但因为我们所有人都相信它有价值，它才能换来商品和服务。</p>
 </blockquote>
-<p>正是这种构建和相信故事的能力，让我们从一种无足轻重的非洲猿类，变成了地球的主宰。</p>
-<p>读完这本书，我抬头看周围的世界，仿佛一切都变得不一样了。它没有提供轻松的答案，却引发了无穷的思考：我们从哪里来？我们如何走到了今天？以及，我们最终将走向何方？</p>
-<p>这不仅仅是一本历史书，更是一本关于人类自身、关于我们未来的深刻启示录。强烈推荐给每一个对世界保持好奇心的人。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/QingNoteblog/2025/07/29/5f631fa5.html#more" rel="contents">
@@ -597,12 +587,6 @@
 <p><em>那一刻，我才真正理解了什么叫‘面朝大海，春暖花开’。</em></p>
 <h2 id="镰仓大佛与江之电"><a href="#镰仓大佛与江之电" class="headerlink" title="镰仓大佛与江之电"></a>镰仓大佛与江之电</h2><p>从长谷寺出来，步行不久便能瞻仰到镰仓的象征——高德院的青铜大佛。他静静地坐落在那里，神情悲悯而安详，仿佛见证了数百年的风雨变迁。</p>
 <p>回程时，我特意体验了复古的江之电。当电车缓缓驶过海岸线，窗外就是波光粼粼的大海和《灌篮高手》里的经典路口时，童年的记忆瞬间涌上心头。</p>
-<h2 id="小町通的美食慰藉"><a href="#小町通的美食慰藉" class="headerlink" title="小町通的美食慰藉"></a>小町通的美食慰藉</h2><p>旅行的结尾，自然要用美食来画上句号。小町通商业街上人头攒动，我在这里品尝了：</p>
-<ul>
-<li>软糯的酱油团子</li>
-<li>冰凉的紫薯冰淇淋</li>
-<li>新鲜出炉的仙贝</li>
-</ul>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/QingNoteblog/2025/07/29/edb50152.html#more" rel="contents">
@@ -723,11 +707,14 @@
 </ol>
 <h2 id="我的使用体验"><a href="#我的使用体验" class="headerlink" title="我的使用体验"></a>我的使用体验</h2><p>对我来说，改变最大的是“<strong>任务分解</strong>”和“<strong>正向激励</strong>”。</p>
 <p>当我有一个大任务，比如“写一篇关于旅行的文章”时，我会用 FocusFlow 将它分解成“搜集资料”、“拟定大纲”、“撰写初稿”、“配图和修改”等小步骤。每完成一个番茄钟，应用都会有一个小小的庆祝动画，这种即时的满足感给了我持续下去的动力。</p>
-<blockquote>
-<p>“我们不是在管理时间，而是在管理我们自己。”</p>
-</blockquote>
-<p>如果你也像我一样，时常被繁杂的任务和无处不在的干扰所困扰，不妨试试这款 App。有时候，一个好的工具真的能事半功倍。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/QingNoteblog/2025/07/28/3e8b7646.html#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -846,11 +833,6 @@
 <li><strong>阅读笔记</strong>：分享最近读过的好书，摘录一些发人深省的句子。</li>
 <li><strong>美食探店</strong>：作为一个吃货，美食的诱惑怎么能抵挡？</li>
 </ol>
-<blockquote>
-<p>“千里之行，始于足下。”</p>
-</blockquote>
-<p>希望这篇文章能成为我的“足下”第一步。未来还有很长的路要走，但我已经准备好迎接挑战，用文字去探索更广阔的世界。</p>
-<p>感谢你的阅读，期待与你在这里再次相遇！</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/QingNoteblog/2025/07/28/7a776471.html#more" rel="contents">
