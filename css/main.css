@@ -1337,7 +1337,7 @@ pre code {
     transition: all 0.2s ease-in-out;
   }
   .links-of-author a::before {
-    background: #57ffdf;
+    background: #b9cdff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2999,8 +2999,6 @@ body::before {
 /* 3.2. Body 元素的基础样式设置 */
 body {
   background: none !important; /* 移除 body 元素默认的背景色，确保伪元素背景层可见。 */
-  display: flex; /* 使用 Flexbox 布局模型。 */
-  flex-direction: column; /* 将 body 的子元素垂直方向排列。 */
   min-height: 100vh; /* 设置 body 的最小高度为视口高度，确保即使内容较少，页脚也能保持在底部。 */
 }
 /* 3.3. 主内容区 (.main) 伸展设置 */
@@ -3451,7 +3449,7 @@ main.main {
 }
 /*
  * ===================================================================
- * ✨ APlayer 播放器入场动画 (最终修复版)
+ * ✨ APlayer 播放器入场动画
  * ===================================================================
  */
 /* 1. 定义背景“揭开”动画 */
